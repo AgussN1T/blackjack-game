@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BlackJack 🃏</title>
+    <link rel="icon" href="assets\joker.png" type="image/x-icon">
     <link rel="stylesheet" href="style.css">
 </head>
 
@@ -12,7 +13,32 @@
     <header>
 
     </header>
-    <main>
+    <main class="mesa">
+
+        <section class="zona-croupier">
+            <h2>Crupier</h2>
+                <div class="mano-layout mesa-layout">
+                    <div id="contenedor-cartas-crupier" class="crupier"></div>
+                </div>
+        </section>
+
+        <section class="feedback" id="feedback">
+            Presioná "Repartir" para comenzar
+            <button id="btn-deal" class="pulse">Deal</button>
+        </section>
+
+        <section class="zona-jugador">
+            <h2>Jugador</h2>
+                <div class="mano-layout mesa-layout"> 
+                    <div id="contenedor-cartas-jugador" class="jugador"></div>
+                </div>
+
+                <div class="acciones">
+                <button id="btn-hit" >Hit</button>
+                <button id="btn-stand" disabled>Stand</button>
+                <button id="btn-double" disabled>Double</button>
+            </div>
+        </section>
 
     </main>
 

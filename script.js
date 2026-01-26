@@ -13,25 +13,35 @@ function generarMazo(mazo, config) {
         }
     }
 
-    for (let i = 0; i < cartasTotales.length; i++) {
-
+    let cantCartas = cartasTotales.length;
+    for (let i = 0; i < cantCartas; i++) {
         let indexR = Math.floor(Math.random() * cartasTotales.length);
         let carta = cartasTotales.splice(indexR, 1)[0];
         mazo.push(carta);
 
     }
+
+    while (cartasTotales.length > 0) {
+        let indexR = Math.floor(Math.random() * cartasTotales.length);
+        let carta = cartasTotales.splice(indexR, 1)[0];
+        mazo.push(carta);
+    }
+
+
 }
 
-function hit(mesa,mazo){
+function hit(mesa,contenedor,mazo){
     
     if(mazo.length === 0) throw console.error();
     
     mesa.push(mazo.splice(0,1)[0]);
     
+    mostrarCartas(mesa,contenedor);
+    
 }
 
 function stand(){
-    croupier();
+    // croupier();
     return;
 }
 
@@ -48,25 +58,27 @@ function doubleDown(){
     return;
 }
 
-function mostrarMesa(index) {
-    const mesaElement = mesaElements[index];
-    mesaElement.innerHTML = '';
+function mostrarCartas(mesa, contenedor) {
+    contenedor.innerHTML = '';
 
-    if (mesa[index].length === 0) return;
+    mesa.forEach((carta, index) => {
+        const divCarta = document.createElement('div');
+        
+        divCarta.style.left = `${index * 30}px`;
+        divCarta.style.zIndex = index;
 
-    const carta = mesa[index][mesa[index].length - 1];
+        divCarta.classList.add('carta');
+        if(carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
+        renderizarCarta(divCarta,carta);
 
-    const divCarta = document.createElement('div');
-    divCarta.classList.add('carta');
+        divCarta.dataset.index = index;
+        contenedor.appendChild(divCarta);
+    });
 
-    renderizarCarta(divCarta, carta);
 
-    mesaElement.appendChild(divCarta);
 }
 
-
 function renderizarCarta(divCarta, carta) {
-
 
     if (carta.valor === 1) {
         divCarta.innerHTML = `
@@ -121,7 +133,33 @@ const mesaCroupier = [];
 let fichasJugador = 500;
 let apuesta = 0;
 
+let estado = "esperando";
+
 let puntuacionTotal = 0;
+
+const contenedorCrupier = document.getElementById('contenedor-cartas-crupier');
+const contenedorJugador = document.getElementById('contenedor-cartas-jugador');
+const btnHit = document.getElementById('btn-hit');
+const btnDeal = document.getElementById('btn-deal');
+const btnStand = document.getElementById('btn-stand');
+
+btnHit.addEventListener('click', () => {
+    hit(mesaJugador,contenedorJugador, mazo);
+});
+
+btnDeal.addEventListener('click', () => {
+    hit(mesaJugador,contenedorJugador,mazo);
+    hit(mesaJugador,contenedorJugador,mazo);
+
+    hit(mesaCroupier,contenedorCrupier,mazo);
+    hit(mesaCroupier,contenedorCrupier,mazo);
+
+    btnDeal.disabled = true;
+    btnHit.disabled = false;
+    btnStand.disabled= false;
+});
+
+
 
 function iniciarJuego() {
     mazo.length = 0; 
@@ -130,20 +168,20 @@ function iniciarJuego() {
     fichasJugador = 0;
     apuesta = 0;
 
+    btnHit.disabled = true;
+    btnStand.disabled= true
+
     generarMazo(mazo, config);
 
     fichasJugador = 200;
 
-    // comenzar apuesta
-    // hit(mesaJugador,mazo);
-    // hit(mesaJugador,mazo);
-
-    // hit(mesaCroupier,mazo);
-    // hit(mesaCroupier,mazo);
-    
     console.log("Cartas Jugador:", mesaJugador);
+    console.log("Cartas Crupier:", mesaCroupier);
 
 
 }
 
 iniciarJuego()
+
+
+
