@@ -24,6 +24,93 @@ body {
 }
 
 
+
+header {
+    display: flex;
+    justify-content: center;
+    padding: 24px 0;
+}
+
+.header-carta {
+    background: #fff;
+    width: 320px;
+    padding: 18px 20px;
+    border-radius: 14px;
+    box-shadow:
+        0 8px 18px rgba(0,0,0,.35),
+        inset 0 0 0 2px #e6e6e6;
+    text-align: center;
+    transform: rotate(-1.5deg);
+    position: relative;
+}
+
+.header-carta h1 {
+    font-size: 2rem;
+    letter-spacing: 2px;
+}
+
+.header-carta small {
+    display: block;
+    margin-top: 6px;
+    font-size: 0.8rem;
+    color: #555;
+}
+
+
+.hud {
+    position: fixed; 
+    top: 40px;        
+    left: 20px;       
+    
+    width: 220px;
+    padding: 20px;
+    backdrop-filter: blur(10px);
+    background: rgba(0, 0, 0, 0.35);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 14px;
+    z-index: 1000;    
+}
+
+.hud h2 {
+    margin: 0;
+    font-size: 18px;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+    padding-bottom: 10px;
+}
+
+.hud-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 10px 12px;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 14px;
+}
+
+.hud-item .label {
+    opacity: 0.8;
+}
+
+.hud-fondo {
+    flex-direction: column;
+    gap: 6px;
+}
+
+.hud-fondo select {
+    padding: 6px;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+    background: #222;
+    color: white;
+    cursor: pointer;
+}
+
 main,
 .mesa {
     flex: 1;
@@ -31,8 +118,18 @@ main,
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 40px;
     color: white;
+    
+    border: 3px dashed rgba(255, 255, 255, 0.1); 
+    border-radius: 50px; 
+    
+    margin: 20px auto 40px auto; 
+    width: 90%; 
+    max-width: 1200px;
+    
+    /* Efecto de profundidad */
+    background: rgba(0, 0, 0, 0.1);
+    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
 }
 
 
@@ -99,9 +196,7 @@ main,
 
 .carta {
     position: absolute;
-    /* Esto permite que se encimen */
     transition: all 0.3s ease;
-    /* Opcional: para que se muevan suavemente */
 }
 
 .carta.roja {
@@ -146,11 +241,23 @@ main,
 
 
 footer {
-    padding: 10px 0 14px;
+flex-shrink: 0;
+    padding: 18px 20px; 
     text-align: center;
     font-size: 0.75rem;
     color: #cfcfcf;
     opacity: 0.8;
+    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
+
+    width: fit-content;
+    width: 70%;
+    max-width: 90%;         
+    margin: 60px auto 20px auto; 
+    
+    border-radius: 14px;     
+    border: 1px solid rgba(255, 255, 255, 0.1);
+
+    pointer-events: none;
 }
 
 footer span {
@@ -166,7 +273,7 @@ footer .frase {
 
 footer a {
     color: white;
-    /* pointer-events: auto; */
+    pointer-events: auto;
 }
 
 .imagen-joker {

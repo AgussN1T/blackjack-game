@@ -10,9 +10,35 @@
 </head>
 
 <body>
-    <header>
+    <section class="hud">
+        <h2 id="estado-juego">BLACKJACK</h2>
 
-    </header>
+        <div class="hud-item">
+            <span class="label">Fichas del Jugador</span>
+            <span id="contador-fichas">—</span>
+        </div>
+
+        <div class="hud-item">
+            <span class="label">Apuesta</span>
+            <span id="contador-apuesta">—</span>
+        </div>
+
+        <div class="hud-item">
+            <span class="label">Rondas Ganadas</span>
+            <span id="contador-rondas">—</span>
+        </div>
+        
+        <div class="hud-item">
+            <span class="label">Racha</span>
+            <span id="contador-racha">—</span>
+        </div>
+
+        <div class="hud-item">
+            <span class="label">Tiempo:</span>
+            <span id="cronometro">00:00</span>
+        </div>
+    </section>
+
     <main class="mesa">
 
         <section class="zona-croupier">
@@ -39,7 +65,6 @@
                 <button id="btn-double" disabled>Double</button>
             </div>
         </section>
-
     </main>
 
     <footer>
@@ -50,6 +75,7 @@
         <span class="frase">
             Hecho con insomnio y buen humor
         </span>
+        <img src="assets\joker.png" alt="Joker" class="imagen-joker">
         <a href="https://github.com/AgussN1T" target="_blank">Un vistazo a mis otros proyectos</a>
         <img src="assets\joker.png" alt="Joker" class="imagen-joker">
     </footer>

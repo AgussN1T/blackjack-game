@@ -74,8 +74,6 @@ function mostrarCartas(mesa, contenedor) {
         divCarta.dataset.index = index;
         contenedor.appendChild(divCarta);
     });
-
-
 }
 
 function renderizarCarta(divCarta, carta) {
@@ -125,8 +123,6 @@ function renderizarCarta(divCarta, carta) {
 }
 
 
-
-
 const mazo = [];
 const mesaJugador = [];
 const mesaCroupier = [];
@@ -137,14 +133,25 @@ let estado = "esperando";
 
 let puntuacionTotal = 0;
 
+const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// await delay(2000);
+
 const contenedorCrupier = document.getElementById('contenedor-cartas-crupier');
 const contenedorJugador = document.getElementById('contenedor-cartas-jugador');
-const btnHit = document.getElementById('btn-hit');
+
 const btnDeal = document.getElementById('btn-deal');
+const btnHit = document.getElementById('btn-hit');
 const btnStand = document.getElementById('btn-stand');
+
+
 
 btnHit.addEventListener('click', () => {
     hit(mesaJugador,contenedorJugador, mazo);
+});
+
+btnStand.addEventListener('click', () => {
+    btnHit.disabled = true;
+    btnStand.disabled= true;
 });
 
 btnDeal.addEventListener('click', () => {
@@ -160,7 +167,6 @@ btnDeal.addEventListener('click', () => {
 });
 
 
-
 function iniciarJuego() {
     mazo.length = 0; 
     mesaCroupier.length = 0;
@@ -170,6 +176,7 @@ function iniciarJuego() {
 
     btnHit.disabled = true;
     btnStand.disabled= true
+
 
     generarMazo(mazo, config);
 
