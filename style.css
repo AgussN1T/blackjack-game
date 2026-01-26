@@ -3,7 +3,22 @@ body {
     height: 100%;
     margin: 0;
     font-family: sans-serif;
-    background: radial-gradient(circle, #2E8B57 0%, #145A32 70%);
+    margin: 0;
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at center,
+      rgba(255,255,255,0.08) 0%,
+      rgba(0,0,0,0.35) 60%,
+      rgba(0,0,0,0.7) 100%
+    ),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255,255,255,0.02) 0,
+      rgba(255,255,255,0.02) 2px,
+      rgba(0,0,0,0.02) 2px,
+      rgba(0,0,0,0.02) 4px
+    ),
+    #0b4f2f;
 }
 
 body {
@@ -37,7 +52,6 @@ main {
     transition: transform 0.2s;
 }
 
-
 footer {
     padding: 10px 0 14px;
     text-align: center;
@@ -55,4 +69,15 @@ footer .frase {
     margin-top: 4px;
     font-style: italic;
     opacity: 0.7;
+}
+footer a {
+    color: white;
+    /* pointer-events: auto; */
+}
+
+.imagen-joker {
+    width: 48px;
+    height: 48px;
+    vertical-align: middle;
+    object-fit: contain;
 }
