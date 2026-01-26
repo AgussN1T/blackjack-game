@@ -27,7 +27,6 @@ function generarMazo(mazo, config) {
         mazo.push(carta);
     }
 
-
 }
 
 function hit(mesa,contenedor,mazo){
@@ -50,7 +49,9 @@ function doubleDown(){
     if(fichasJugador>=apuesta){
         fichasJugador -= apuesta;
         apuesta = apuesta*2;
-        hit(mesaJugador,mazo)
+        hit(mesaJugador,mazo);
+        btnHit.disabled = true;
+        // stand();
     }
     else{
         console.log('No tienes suficientes fichas');
@@ -64,8 +65,9 @@ function mostrarCartas(mesa, contenedor) {
     mesa.forEach((carta, index) => {
         const divCarta = document.createElement('div');
         
-        divCarta.style.left = `${index * 30}px`;
-        divCarta.style.zIndex = index;
+        // divCarta.style.left = `${index * 30}px`;
+        // divCarta.style.top = '0px';
+        // divCarta.style.zIndex = index;
 
         divCarta.classList.add('carta');
         if(carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
@@ -136,13 +138,16 @@ let puntuacionTotal = 0;
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // await delay(2000);
 
-const contenedorCrupier = document.getElementById('contenedor-cartas-crupier');
-const contenedorJugador = document.getElementById('contenedor-cartas-jugador');
+const contenedorCrupier = document.getElementById('container-crupier');
+const contenedorJugador = document.getElementById('container-jugador');
+
+// const contenedorCrupier = document.getElementById('contenedor-cartas-crupier');
+// const contenedorJugador = document.getElementById('contenedor-cartas-jugador');
 
 const btnDeal = document.getElementById('btn-deal');
 const btnHit = document.getElementById('btn-hit');
 const btnStand = document.getElementById('btn-stand');
-
+const btnDouble = document.getElementById('btn-stand');
 
 
 btnHit.addEventListener('click', () => {
@@ -151,19 +156,45 @@ btnHit.addEventListener('click', () => {
 
 btnStand.addEventListener('click', () => {
     btnHit.disabled = true;
-    btnStand.disabled= true;
+    btnStand.disabled = true;
+    btnDouble.disabled = true;
 });
 
+
 btnDeal.addEventListener('click', () => {
-    hit(mesaJugador,contenedorJugador,mazo);
-    hit(mesaJugador,contenedorJugador,mazo);
+/*     if (apuesta > 0) {
+        fichasJugador -= apuesta;
+        actualizarHUD();
+        
+        hit(mesaJugador,contenedorJugador,mazo);
+        hit(mesaJugador,contenedorJugador,mazo);
 
-    hit(mesaCroupier,contenedorCrupier,mazo);
-    hit(mesaCroupier,contenedorCrupier,mazo);
+        hit(mesaCroupier,contenedorCrupier,mazo);
+        hit(mesaCroupier,contenedorCrupier,mazo);
 
-    btnDeal.disabled = true;
-    btnHit.disabled = false;
-    btnStand.disabled= false;
+        btnDeal.disabled = true;
+        btnHit.disabled = false;
+        btnStand.disabled= false;
+    } else {
+        alert("Haz una apuesta primero");
+    } */
+
+     fichasJugador -= apuesta;
+        
+        hit(mesaJugador,contenedorJugador,mazo);
+        hit(mesaJugador,contenedorJugador,mazo);
+
+        hit(mesaCroupier,contenedorCrupier,mazo);
+        hit(mesaCroupier,contenedorCrupier,mazo);
+
+        btnDeal.disabled = true;
+        btnHit.disabled = false;
+        btnStand.disabled= false;
+        btnDouble.disabled= false;
+
+        mostrarCartas(mesaJugador,contenedorJugador);
+        mostrarCartas(mesaCroupier,contenedorCrupier);
+
 });
 
 
@@ -176,6 +207,7 @@ function iniciarJuego() {
 
     btnHit.disabled = true;
     btnStand.disabled= true
+    btnDouble.disabled= true;
 
 
     generarMazo(mazo, config);

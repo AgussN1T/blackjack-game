@@ -10,75 +10,45 @@
 </head>
 
 <body>
-    <section class="hud">
-        <h2 id="estado-juego">BLACKJACK</h2>
 
-        <div class="hud-item">
-            <span class="label">Fichas del Jugador</span>
-            <span id="contador-fichas">—</span>
-        </div>
 
-        <div class="hud-item">
-            <span class="label">Apuesta</span>
-            <span id="contador-apuesta">—</span>
-        </div>
 
-        <div class="hud-item">
-            <span class="label">Rondas Ganadas</span>
-            <span id="contador-rondas">—</span>
-        </div>
-        
-        <div class="hud-item">
-            <span class="label">Racha</span>
-            <span id="contador-racha">—</span>
-        </div>
-
-        <div class="hud-item">
-            <span class="label">Tiempo:</span>
-            <span id="cronometro">00:00</span>
-        </div>
-    </section>
+    <div class="app">
+    <aside class="hud">
+      <h2>Blackjack</h2>
+      <div class="info">
+        <p><span>Apuesta:</span> $500</p>
+        <p><span>Saldo:</span> $10.000</p>
+        <p><span>Ronda:</span> 3</p>
+      </div>
+    </aside>
 
     <main class="mesa">
+      <div class="crupier mano">
+        <h3>Crupier</h3>
+        <div id="container-crupier" class="cartas"></div>
+      </div>
 
-        <section class="zona-croupier">
-            <h2>Crupier</h2>
-                <div class="mano-layout mesa-layout">
-                    <div id="contenedor-cartas-crupier" class="crupier"></div>
-                </div>
-        </section>
+      <div class="feedback">
+        <p>Tu turno</p>
+      </div>
 
-        <section class="feedback" id="feedback">
-            Presioná "Repartir" para comenzar
-            <button id="btn-deal" class="pulse">Deal</button>
-        </section>
+      <div class="jugador mano">
+        <h3>Jugador</h3>
+        <div id="container-jugador" class="cartas"></div>
+      </div>
 
-        <section class="zona-jugador">
-            <h2>Jugador</h2>
-                <div class="mano-layout mesa-layout"> 
-                    <div id="contenedor-cartas-jugador" class="jugador"></div>
-                </div>
-
-                <div class="acciones">
-                <button id="btn-hit" >Hit</button>
-                <button id="btn-stand" disabled>Stand</button>
-                <button id="btn-double" disabled>Double</button>
-            </div>
-        </section>
+      <div class="controles">
+        <button id="btn-deal">Repartir</button>
+        <button id="btn-hit">Hit</button>
+        <button id="btn-stand">Stand</button>
+        <button id="btn-double">Double</button>
+      </div>
     </main>
+  </div>
 
-    <footer>
-        <span>BlackJack</span> •
-        <span>v1.0</span> •
-        <span>Juego de cartas</span>
 
-        <span class="frase">
-            Hecho con insomnio y buen humor
-        </span>
-        <img src="assets\joker.png" alt="Joker" class="imagen-joker">
-        <a href="https://github.com/AgussN1T" target="_blank">Un vistazo a mis otros proyectos</a>
-        <img src="assets\joker.png" alt="Joker" class="imagen-joker">
-    </footer>
+
 </body>
 <script type="module" src="script.js"></script>
 

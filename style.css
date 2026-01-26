@@ -1,179 +1,3 @@
-html,
-body {
-    height: 100%;
-    margin: 0;
-    font-family: system-ui, sans-serif;
-    margin: 0;
-    min-height: 100vh;
-    background:
-        radial-gradient(circle at center,
-            rgba(255, 255, 255, 0.08) 0%,
-            rgba(0, 0, 0, 0.35) 60%,
-            rgba(0, 0, 0, 0.7) 100%),
-        repeating-linear-gradient(45deg,
-            rgba(255, 255, 255, 0.02) 0,
-            rgba(255, 255, 255, 0.02) 2px,
-            rgba(0, 0, 0, 0.02) 2px,
-            rgba(0, 0, 0, 0.02) 4px),
-        #0b4f2f;
-}
-
-body {
-    display: flex;
-    flex-direction: column;
-}
-
-
-
-header {
-    display: flex;
-    justify-content: center;
-    padding: 24px 0;
-}
-
-.header-carta {
-    background: #fff;
-    width: 320px;
-    padding: 18px 20px;
-    border-radius: 14px;
-    box-shadow:
-        0 8px 18px rgba(0,0,0,.35),
-        inset 0 0 0 2px #e6e6e6;
-    text-align: center;
-    transform: rotate(-1.5deg);
-    position: relative;
-}
-
-.header-carta h1 {
-    font-size: 2rem;
-    letter-spacing: 2px;
-}
-
-.header-carta small {
-    display: block;
-    margin-top: 6px;
-    font-size: 0.8rem;
-    color: #555;
-}
-
-
-.hud {
-    position: fixed; 
-    top: 40px;        
-    left: 20px;       
-    
-    width: 220px;
-    padding: 20px;
-    backdrop-filter: blur(10px);
-    background: rgba(0, 0, 0, 0.35);
-    color: white;
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 14px;
-    z-index: 1000;    
-}
-
-.hud h2 {
-    margin: 0;
-    font-size: 18px;
-    text-align: center;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.3);
-    padding-bottom: 10px;
-}
-
-.hud-item {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 10px 12px;
-    border-radius: 10px;
-    display: flex;
-    justify-content: space-between;
-    font-size: 14px;
-}
-
-.hud-item .label {
-    opacity: 0.8;
-}
-
-.hud-fondo {
-    flex-direction: column;
-    gap: 6px;
-}
-
-.hud-fondo select {
-    padding: 6px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    background: #222;
-    color: white;
-    cursor: pointer;
-}
-
-main,
-.mesa {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    color: white;
-    
-    border: 3px dashed rgba(255, 255, 255, 0.1); 
-    border-radius: 50px; 
-    
-    margin: 20px auto 40px auto; 
-    width: 90%; 
-    max-width: 1200px;
-    
-    /* Efecto de profundidad */
-    background: rgba(0, 0, 0, 0.1);
-    box-shadow: inset 0 0 50px rgba(0,0,0,0.5);
-}
-
-
-.zona-juego {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 40px;
-}
-
-.mesa-layout {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-width: 700px;
-}
-
-.mesa-layout h2 {
-    margin-bottom: 10px;
-}
-
-
-
-/* .jugador, .crupier{
-    color: white;
-    display: flex;
-    gap: 15px;
-    justify-content: center;
-    padding: 20px;
-    position: relative;
-} */
-
-.jugador,
-.crupier {
-    color: white;
-    display: flex;
-    justify-content: center;
-    padding: 20px;
-
-    position: relative;
-    min-height: 150px;
-    width: 100%;
-    margin-bottom: 20px;
-}
 
 .carta {
     width: 90px;
@@ -192,11 +16,14 @@ main,
     transition: transform 0.2s;
 }
 
-
-
 .carta {
-    position: absolute;
+    position: relative;
+    margin-left: -40px;
     transition: all 0.3s ease;
+}
+
+.carta:first-child {
+  margin-left: 0;
 }
 
 .carta.roja {
@@ -204,15 +31,8 @@ main,
 }
 
 @keyframes bounce {
-
-    0%,
-    100% {
-        transform: translateY(0);
-    }
-
-    50% {
-        transform: translateY(-20px);
-    }
+    0%,100% {transform: translateY(0);}
+    50% {transform: translateY(-20px);}
 }
 
 .carta:hover {
@@ -240,70 +60,121 @@ main,
 
 
 
-footer {
-flex-shrink: 0;
-    padding: 18px 20px; 
-    text-align: center;
-    font-size: 0.75rem;
-    color: #cfcfcf;
-    opacity: 0.8;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, transparent 100%);
 
-    width: fit-content;
-    width: 70%;
-    max-width: 90%;         
-    margin: 60px auto 20px auto; 
-    
-    border-radius: 14px;     
-    border: 1px solid rgba(255, 255, 255, 0.1);
+* {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, sans-serif;
+    }
 
-    pointer-events: none;
+    body {
+      background: radial-gradient(circle at top, #145a32, #0b2e1a);
+      height: 100vh;
+      color: #f5f5f5;
+    }
+
+    .app {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      height: 100vh;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    .hud {
+      background: linear-gradient(180deg, #111, #1c1c1c);
+      border: 2px solid white;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: inset 0 0 20px rgba(0,0,0,.7);
+    }
+
+    .hud h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      color: white;
+    }
+
+    .hud .info p {
+      margin-bottom: 12px;
+      font-size: 15px;
+    }
+
+    .hud span {
+      color: white;
+    }
+
+    .mesa {
+      background: radial-gradient(circle at center, #1e8449, #145a32);
+      border: 3px solid #0a2a18;
+      border-radius: 40px;
+      padding: 30px;
+      display: grid;
+      grid-template-rows: auto 1fr auto auto;
+      gap: 25px;
+      box-shadow: inset 0 0 40px rgba(0,0,0,.6);
+    }
+
+    .mano {
+      background: rgba(0,0,0,0.35);
+      border: 2px solid white;
+      border-radius: 30px;
+      padding: 20px;
+    }
+
+    .mano h3 {
+      text-align: center;
+      margin-bottom: 10px;
+      color: white;
+      font-weight: normal;
+      letter-spacing: 1px;
+    }
+
+    .cartas {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      min-height: 80px;
+      position: relative;
+    }
+
+    .feedback {
+      text-align: center;
+      font-size: 22px;
+      color: white;
+      letter-spacing: 2px;
+    }
+
+    .controles {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    .controles button {
+      background: linear-gradient(180deg, white, white);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,.5);
+    }
+
+    .controles button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,.6);
+    }
+
+.carta.boca-abajo {
+  background: linear-gradient(135deg, #7b1e1e, #3b0f0f);
+  border: 2px solid #fff;
 }
 
-footer span {
-    margin: 0 6px;
-}
-
-footer .frase {
-    display: block;
-    margin-top: 4px;
-    font-style: italic;
-    opacity: 0.7;
-}
-
-footer a {
-    color: white;
-    pointer-events: auto;
-}
-
-.imagen-joker {
-    width: 48px;
-    height: 48px;
-    vertical-align: middle;
-    object-fit: contain;
-}
-
-
-.pulse {
-  --color: #ef6eae;
-  --hover: #ef8f6e;
-}
-
-.pulse:hover,
-.pulse:focus {
-  -webkit-animation: pulse 1s;
-          animation: pulse 1s;
-  box-shadow: 0 0 0 2em rgba(255, 255, 255, 0);
-}
-
-@-webkit-keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 var(--hover);
-  }
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow: 0 0 0 0 var(--hover);
-  }
+.carta.boca-abajo::before {
+  content: "🂠";
+  font-size: 40px;
+  color: white;
 }
