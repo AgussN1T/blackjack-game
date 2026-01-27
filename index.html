@@ -2,24 +2,31 @@
 <html lang="en">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BlackJack 🃏</title>
-    <link rel="icon" href="assets\joker.png" type="image/x-icon">
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>BlackJack 🃏</title>
+  <link rel="icon" href="assets\joker.png" type="image/x-icon">
+  <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-
-
-    <div class="app">
+  <div class="app">
     <aside class="hud">
       <h2>Blackjack</h2>
       <div class="info">
-        <p><span>Apuesta:</span> $500</p>
-        <p><span>Saldo:</span> $10.000</p>
-        <p><span>Ronda:</span> 3</p>
+        <p><span>Fichas:</span><span id="saldo">--</span></p>
+
+        <div class="apuesta">
+          <p><span>Apuesta:</span><span id="valor-apuesta">--</span></p>
+
+          <div class="controles-apuesta">
+            <button id="btn-bajar-apuesta">−</button>
+            <button id="btn-subir-apuesta">+</button>
+          </div>
+        </div>
+
+
       </div>
     </aside>
 
@@ -30,7 +37,7 @@
       </div>
 
       <div class="feedback">
-        <p>Tu turno</p>
+        <p>Si</p>
       </div>
 
       <div class="jugador mano">

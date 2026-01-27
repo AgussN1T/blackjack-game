@@ -135,7 +135,7 @@ let estado = "esperando";
 
 let puntuacionTotal = 0;
 
-const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // await delay(2000);
 
 const contenedorCrupier = document.getElementById('container-crupier');
@@ -144,10 +144,42 @@ const contenedorJugador = document.getElementById('container-jugador');
 // const contenedorCrupier = document.getElementById('contenedor-cartas-crupier');
 // const contenedorJugador = document.getElementById('contenedor-cartas-jugador');
 
+
+// Apuestas
+const saldoJugador = document.getElementById('saldo');
+const valorApuesta = document.getElementById('valor-apuesta');
+const btnBajarApuesta = document.getElementById('btn-bajar-apuesta');
+const btnSubirApuesta = document.getElementById('btn-subir-apuesta');
+
+
+function actualizarApuesta() {
+    valorApuesta.textContent = apuesta;
+}
+
+btnBajarApuesta.addEventListener('click', () => {
+    if (apuesta - 25 >= 0) {
+        apuesta -= 25;
+        actualizarApuesta();
+    }
+});
+
+btnSubirApuesta.addEventListener('click', () => {
+    if (apuesta + 25 <= fichasJugador) {
+        apuesta += 25;
+        actualizarApuesta();
+    }
+});
+
+
+
+
+
 const btnDeal = document.getElementById('btn-deal');
 const btnHit = document.getElementById('btn-hit');
 const btnStand = document.getElementById('btn-stand');
 const btnDouble = document.getElementById('btn-stand');
+
+
 
 
 btnHit.addEventListener('click', () => {
@@ -162,24 +194,9 @@ btnStand.addEventListener('click', () => {
 
 
 btnDeal.addEventListener('click', () => {
-/*     if (apuesta > 0) {
+    if (apuesta > 0) {
         fichasJugador -= apuesta;
-        actualizarHUD();
-        
-        hit(mesaJugador,contenedorJugador,mazo);
-        hit(mesaJugador,contenedorJugador,mazo);
-
-        hit(mesaCroupier,contenedorCrupier,mazo);
-        hit(mesaCroupier,contenedorCrupier,mazo);
-
-        btnDeal.disabled = true;
-        btnHit.disabled = false;
-        btnStand.disabled= false;
-    } else {
-        alert("Haz una apuesta primero");
-    } */
-
-     fichasJugador -= apuesta;
+        saldoJugador.textContent = fichasJugador;
         
         hit(mesaJugador,contenedorJugador,mazo);
         hit(mesaJugador,contenedorJugador,mazo);
@@ -192,8 +209,15 @@ btnDeal.addEventListener('click', () => {
         btnStand.disabled= false;
         btnDouble.disabled= false;
 
+        btnBajarApuesta.disabled = true;
+        btnSubirApuesta.disabled = true;
+
         mostrarCartas(mesaJugador,contenedorJugador);
         mostrarCartas(mesaCroupier,contenedorCrupier);
+
+        } else {
+        alert("Haz una apuesta primero");
+    } 
 
 });
 
@@ -213,6 +237,7 @@ function iniciarJuego() {
     generarMazo(mazo, config);
 
     fichasJugador = 200;
+    saldoJugador.textContent = fichasJugador;
 
     console.log("Cartas Jugador:", mesaJugador);
     console.log("Cartas Crupier:", mesaCroupier);
