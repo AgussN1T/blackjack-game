@@ -36,7 +36,8 @@ function hit(mesa, contenedor, mazo) {
     mesa.push(mazo.splice(0, 1)[0]);
 
     mostrarCartas(mesa, contenedor);
-    calcularMano(mesa);
+
+    puntajeJugador.textContent = calcularMano(mesa);
 }
 
 function stand() {
@@ -147,16 +148,12 @@ let puntuacionTotal = 0;
 const contenedorCrupier = document.getElementById('container-crupier');
 const contenedorJugador = document.getElementById('container-jugador');
 
-// const contenedorCrupier = document.getElementById('contenedor-cartas-crupier');
-// const contenedorJugador = document.getElementById('contenedor-cartas-jugador');
-
-
 // Apuestas
 const saldoJugador = document.getElementById('saldo');
 const valorApuesta = document.getElementById('valor-apuesta');
 const btnBajarApuesta = document.getElementById('btn-bajar-apuesta');
 const btnSubirApuesta = document.getElementById('btn-subir-apuesta');
-
+const btnRepetirApuesta = document.getElementById('btn-repetir-apuesta');
 
 function actualizarApuesta() {
     valorApuesta.textContent = apuesta;
@@ -176,10 +173,11 @@ btnSubirApuesta.addEventListener('click', () => {
     }
 });
 
+//botones de juego
 const btnDeal = document.getElementById('btn-deal');
 const btnHit = document.getElementById('btn-hit');
 const btnStand = document.getElementById('btn-stand');
-const btnDouble = document.getElementById('btn-stand');
+const btnDouble = document.getElementById('btn-double');
 
 btnHit.addEventListener('click', () => {
     hit(mesaJugador, contenedorJugador, mazo);
@@ -194,9 +192,17 @@ btnStand.addEventListener('click', () => {
 });
 
 btnDeal.addEventListener('click', () => {
+    deal();
+
+});
+
+
+function deal(){
     if (apuesta > 0) {
         fichasJugador -= apuesta;
         saldoJugador.textContent = fichasJugador;
+
+        apuestaAnterior = apuesta;
 
         hit(mesaJugador, contenedorJugador, mazo);
         hit(mesaJugador, contenedorJugador, mazo);
@@ -220,12 +226,15 @@ btnDeal.addEventListener('click', () => {
     } else {
         alert("Haz una apuesta primero");
     }
+}
 
-});
 
+//puntajes y estado
 const puntajeJugador = document.getElementById('puntos-jugador');
 const puntajeCroupier = document.getElementById('puntos-jugador');
 const estadoPartida = document.getElementById('estado-partida');
+
+let apuestaAnterior = 0;
 
 function actualizarEstado(nuevoEstado) {
     estado = nuevoEstado;
@@ -236,7 +245,6 @@ function actualizarEstado(nuevoEstado) {
 function calcularMano(mesa) {
 
     let puntajeTotal = 0;
-    let puntajeAlternativo = 0;
     let cantAses = 0;
 
     for (let i = 0; i < mesa.length; i++) {
@@ -278,11 +286,9 @@ function calcularMano(mesa) {
         }
 
     }
-
-    puntajeJugador.textContent = puntajeTotal;
-
+    
+    return puntajeTotal;
 }
-
 
 function iniciarJuego() {
     mazo.length = 0;
@@ -306,4 +312,25 @@ function iniciarJuego() {
 iniciarJuego()
 
 
+// const puntajeJugador = document.getElementById('puntos-jugador');
+// const puntajeCroupier = document.getElementById('puntos-jugador');
+// const estadoPartida = document.getElementById('estado-partida');
+
+
+function resetearJuego(){
+    saldoJugador.textContent = fichasJugador;
+    mesaCroupier.length = 0;
+    mesaJugador.length = 0;
+    
+    estadoPartida.textContent = "Ingrese una apuesta"
+    puntajeJugador.textContent = "?"
+    puntajeCroupier.textContent = "?"
+    
+    btnDeal.disabled = false;
+    btnRepetirApuesta.disable = false;
+    btnBajarApuesta.disable = false;
+    btnSubirApuesta.disable = false;
+    
+    
+}
 

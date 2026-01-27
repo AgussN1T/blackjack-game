@@ -15,10 +15,10 @@
     <aside class="hud">
       <h2>Blackjack</h2>
       <div class="info">
-        <p><span>Fichas:</span><span id="saldo">--</span></p>
+        <p><span>Fichas: </span><span id="saldo">--</span></p>
 
         <div class="apuesta">
-          <p><span>Apuesta:</span><span id="valor-apuesta"> 0</span></p>
+          <p><span>Apuesta: </span><span id="valor-apuesta"> 0</span></p>
 
           <div class="controles-apuesta">
             <button id="btn-bajar-apuesta">−</button>
@@ -26,7 +26,28 @@
           </div>
         </div>
 
+        <div class="separador"></div>
+
+        <button id="btn-repetir-apuesta" class="btn-repetir" disabled>
+          Repetir apuesta
+        </button>
       </div>
+
+      <footer class="hud-footer">
+        <span>BlackJack</span> •
+        <span>v1.0</span> •
+        <span>Juego de cartas</span>
+
+        <span class="frase">
+          Hecho con insomnio y buena onda
+        </span>
+
+        <a href="https://github.com/AgussN1T" target="_blank">
+          Un vistazo a mis otros proyectos
+        </a>
+
+        <img src="assets/joker.png" alt="Joker" class="imagen-joker">
+      </footer>
     </aside>
 
     <main class="mesa">
