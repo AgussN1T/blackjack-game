@@ -18,14 +18,13 @@
         <p><span>Fichas:</span><span id="saldo">--</span></p>
 
         <div class="apuesta">
-          <p><span>Apuesta:</span><span id="valor-apuesta">--</span></p>
+          <p><span>Apuesta:</span><span id="valor-apuesta"> 0</span></p>
 
           <div class="controles-apuesta">
             <button id="btn-bajar-apuesta">−</button>
             <button id="btn-subir-apuesta">+</button>
           </div>
         </div>
-
 
       </div>
     </aside>
@@ -37,7 +36,17 @@
       </div>
 
       <div class="feedback">
-        <p>Si</p>
+        <div class="puntos puntos-crupier">
+          Crupier: <strong id="puntos-crupier">?</strong>
+        </div>
+
+        <p id="estado-partida" class="mensaje">
+          Ingrese una apuesta
+        </p>
+
+        <div class="puntos puntos-jugador">
+          Jugador: <strong id="puntos-jugador">?</strong>
+        </div>
       </div>
 
       <div class="jugador mano">

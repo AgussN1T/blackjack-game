@@ -29,31 +29,37 @@ function generarMazo(mazo, config) {
 
 }
 
-function hit(mesa,contenedor,mazo){
-    
-    if(mazo.length === 0) throw console.error();
-    
-    mesa.push(mazo.splice(0,1)[0]);
-    
-    mostrarCartas(mesa,contenedor);
-    
+function hit(mesa, contenedor, mazo) {
+
+    if (mazo.length === 0) throw console.error();
+
+    mesa.push(mazo.splice(0, 1)[0]);
+
+    mostrarCartas(mesa, contenedor);
+    calcularMano(mesa);
 }
 
-function stand(){
-    // croupier();
-    return;
+function stand() {
+    btnDeal.disabled = true;
+    btnHit.disabled = true;
+    btnStand.disabled = true;
+    btnDouble.disabled = true;
+    actualizarEstado("STAND");
 }
 
-function doubleDown(){
+function doubleDown() {
 
-    if(fichasJugador>=apuesta){
+    if (fichasJugador >= apuesta) {
         fichasJugador -= apuesta;
-        apuesta = apuesta*2;
-        hit(mesaJugador,mazo);
+        apuesta = apuesta * 2;
+        hit(mesaJugador, mazo);
         btnHit.disabled = true;
-        // stand();
+        btnStand.disabled = true;
+        btnDouble.disabled = true;
+
+        //terminar pendiente
     }
-    else{
+    else {
         console.log('No tienes suficientes fichas');
     }
     return;
@@ -64,14 +70,14 @@ function mostrarCartas(mesa, contenedor) {
 
     mesa.forEach((carta, index) => {
         const divCarta = document.createElement('div');
-        
+
         // divCarta.style.left = `${index * 30}px`;
         // divCarta.style.top = '0px';
         // divCarta.style.zIndex = index;
 
         divCarta.classList.add('carta');
-        if(carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
-        renderizarCarta(divCarta,carta);
+        if (carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
+        renderizarCarta(divCarta, carta);
 
         divCarta.dataset.index = index;
         contenedor.appendChild(divCarta);
@@ -88,8 +94,8 @@ function renderizarCarta(divCarta, carta) {
     `;
         return;
     }
-    
-    if(carta.valor <=10){
+
+    if (carta.valor <= 10) {
         divCarta.innerHTML = `
         <div class="valor arriba">${carta.valor}</div>
         <div class="palo">${carta.palo}</div>
@@ -131,7 +137,7 @@ const mesaCroupier = [];
 let fichasJugador = 500;
 let apuesta = 0;
 
-let estado = "esperando";
+let estado = "";
 
 let puntuacionTotal = 0;
 
@@ -170,78 +176,130 @@ btnSubirApuesta.addEventListener('click', () => {
     }
 });
 
-
-
-
-
 const btnDeal = document.getElementById('btn-deal');
 const btnHit = document.getElementById('btn-hit');
 const btnStand = document.getElementById('btn-stand');
 const btnDouble = document.getElementById('btn-stand');
 
-
-
-
 btnHit.addEventListener('click', () => {
-    hit(mesaJugador,contenedorJugador, mazo);
+    hit(mesaJugador, contenedorJugador, mazo);
 });
 
 btnStand.addEventListener('click', () => {
-    btnHit.disabled = true;
-    btnStand.disabled = true;
-    btnDouble.disabled = true;
+    if (estado === "STAND") {
+        stand();
+    }
+    calcularMano(mesaJugador);
+    stand();
 });
-
 
 btnDeal.addEventListener('click', () => {
     if (apuesta > 0) {
         fichasJugador -= apuesta;
         saldoJugador.textContent = fichasJugador;
-        
-        hit(mesaJugador,contenedorJugador,mazo);
-        hit(mesaJugador,contenedorJugador,mazo);
 
-        hit(mesaCroupier,contenedorCrupier,mazo);
-        hit(mesaCroupier,contenedorCrupier,mazo);
+        hit(mesaJugador, contenedorJugador, mazo);
+        hit(mesaJugador, contenedorJugador, mazo);
+
+        // hit(mesaCroupier, contenedorCrupier, mazo);
+        // hit(mesaCroupier, contenedorCrupier, mazo);
 
         btnDeal.disabled = true;
         btnHit.disabled = false;
-        btnStand.disabled= false;
-        btnDouble.disabled= false;
+        btnStand.disabled = false;
+        btnDouble.disabled = false;
 
         btnBajarApuesta.disabled = true;
         btnSubirApuesta.disabled = true;
 
-        mostrarCartas(mesaJugador,contenedorJugador);
-        mostrarCartas(mesaCroupier,contenedorCrupier);
+        mostrarCartas(mesaJugador, contenedorJugador);
+        mostrarCartas(mesaCroupier, contenedorCrupier);
 
-        } else {
+        actualizarEstado("Turno del jugador");
+
+    } else {
         alert("Haz una apuesta primero");
-    } 
+    }
 
 });
 
+const puntajeJugador = document.getElementById('puntos-jugador');
+const puntajeCroupier = document.getElementById('puntos-jugador');
+const estadoPartida = document.getElementById('estado-partida');
+
+function actualizarEstado(nuevoEstado) {
+    estado = nuevoEstado;
+    estadoPartida.textContent = estado;
+}
+
+
+function calcularMano(mesa) {
+
+    let puntajeTotal = 0;
+    let puntajeAlternativo = 0;
+    let cantAses = 0;
+
+    for (let i = 0; i < mesa.length; i++) {
+        if (mesa[i].valor === 1) {
+            puntajeTotal += 11;
+            cantAses++;
+            continue;
+        }
+        if (mesa[i].valor < 10) {
+            puntajeTotal += mesa[i].valor;
+        }
+
+        if (mesa[i].valor >= 10) {
+            puntajeTotal += 10
+        }
+    }
+
+    if ((puntajeTotal === 21)) {
+        if (mesa.length === 2) {
+            actualizarEstado("BLACKJACK");
+        }
+    }
+
+    if (puntajeTotal > 21) {
+
+        if (cantAses > 0) {
+            for (let i = 0; i < cantAses; i++) {
+                puntajeTotal -= 10;
+                if(puntajeTotal <= 21){
+                    break;
+                }
+            }
+            if(puntajeTotal > 21){
+                actualizarEstado("BUST");
+            }
+        }
+        else {
+            actualizarEstado("BUST");
+        }
+
+    }
+
+    puntajeJugador.textContent = puntajeTotal;
+
+}
+
 
 function iniciarJuego() {
-    mazo.length = 0; 
+    mazo.length = 0;
     mesaCroupier.length = 0;
     mesaJugador.length = 0;
     fichasJugador = 0;
     apuesta = 0;
 
     btnHit.disabled = true;
-    btnStand.disabled= true
-    btnDouble.disabled= true;
+    btnStand.disabled = true
+    btnDouble.disabled = true;
 
 
     generarMazo(mazo, config);
 
     fichasJugador = 200;
     saldoJugador.textContent = fichasJugador;
-
-    console.log("Cartas Jugador:", mesaJugador);
-    console.log("Cartas Crupier:", mesaCroupier);
-
 
 }
 
