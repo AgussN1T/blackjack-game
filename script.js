@@ -29,6 +29,16 @@ function generarMazo(mazo) {
 
 }
 
+
+const mazo = [];
+const mesaJugador = [];
+const mesaCrupier = [];
+let fichasJugador = 500;
+let apuesta = 0;
+
+let estado = "";
+
+
 function hit(mesa, contenedor, mazo) {
 
     btnDouble.disabled = true;
@@ -42,17 +52,34 @@ function hit(mesa, contenedor, mazo) {
 
     feedbackPuntajeJugador.textContent = puntajeJugador;
 
+    if(puntajeJugador === 21 || estado === "BUST"){
+        stand();
+    }
+
     // verificarEstado();
 }
 
 function stand() {
-/*     btnDeal.disabled = true;
+
+    
     btnHit.disabled = true;
-    btnStand.disabled = true;
-    btnDouble.disabled = true; */
-    
-    // actualizarEstado("STAND");
-    
+
+    if(estado === "BUST"){
+        console.log("perdiste");
+    }
+
+    if(estado === "BLACKJACK"){
+        console.log("blackjack");
+    }
+
+    setTimeout(() => {
+    estadoPartida.textContent = "Turno del crupier";
+    }, tiempoEnMilisegundos);
+
+
+
+
+    console.log(puntajeJugador);
 }
 
 function doubleDown() {
@@ -155,14 +182,22 @@ btnBajarApuesta.addEventListener('click', () => {
     if (apuesta - 25 >= 0) {
         apuesta -= 25;
         actualizarApuesta();
+        btnSubirApuesta.disable = false;
     }
+    
+
 });
 
 btnSubirApuesta.addEventListener('click', () => {
     if (apuesta + 25 <= fichasJugador) {
         apuesta += 25;
         actualizarApuesta();
+        btnBajarApuesta.disable = false;
     }
+    if(fichasJugador - apuesta === 0){
+        btnSubirApuesta.disable = false;
+    }
+
 });
 
 //botones de juego
@@ -216,8 +251,9 @@ function deal(){
         mostrarCartas(mesaJugador, contenedorJugador);
         mostrarCartas(mesaCrupier, contenedorCrupier);
 
-        puntajeJugador = calcularMano(mesa);
-        feedbackPuntajeJugador.textContent = puntajeJugador;
+        // puntajeJugador = calcularMano(mesaJugador);
+
+        // feedbackPuntajeJugador.textContent = puntajeJugador;
 
 
     } else {
@@ -301,15 +337,6 @@ function resetearJuego(){
     btnSubirApuesta.disable = false;
     
 }
-
-const mazo = [];
-const mesaJugador = [];
-const mesaCrupier = [];
-let fichasJugador = 500;
-let apuesta = 0;
-
-let estado = "";
-
 
 // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // await delay(2000);
