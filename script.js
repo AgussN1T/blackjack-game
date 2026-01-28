@@ -1,6 +1,6 @@
 import config from './config.js';
 
-function generarMazo(mazo, config) {
+function generarMazo(mazo) {
     let cartasTotales = [];
     let valores = config.valores;
     let palos = config.palos;
@@ -31,26 +31,33 @@ function generarMazo(mazo, config) {
 
 function hit(mesa, contenedor, mazo) {
 
-    if (mazo.length === 0) throw console.error();
+    btnDouble.disabled = true;
+    
+    if (mazo.length === 0) generarMazo(mazo);
 
     mesa.push(mazo.splice(0, 1)[0]);
-
     mostrarCartas(mesa, contenedor);
+    
+    puntajeJugador = calcularMano(mesa);
 
-    puntajeJugador.textContent = calcularMano(mesa);
+    feedbackPuntajeJugador.textContent = puntajeJugador;
+
+    // verificarEstado();
 }
 
 function stand() {
-    btnDeal.disabled = true;
+/*     btnDeal.disabled = true;
     btnHit.disabled = true;
     btnStand.disabled = true;
-    btnDouble.disabled = true;
-    actualizarEstado("STAND");
+    btnDouble.disabled = true; */
+    
+    // actualizarEstado("STAND");
+    
 }
 
 function doubleDown() {
 
-    if (fichasJugador >= apuesta) {
+    if (fichasJugador >= apuesta * 2) {
         fichasJugador -= apuesta;
         apuesta = apuesta * 2;
         hit(mesaJugador, mazo);
@@ -71,10 +78,6 @@ function mostrarCartas(mesa, contenedor) {
 
     mesa.forEach((carta, index) => {
         const divCarta = document.createElement('div');
-
-        // divCarta.style.left = `${index * 30}px`;
-        // divCarta.style.top = '0px';
-        // divCarta.style.zIndex = index;
 
         divCarta.classList.add('carta');
         if (carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
@@ -132,18 +135,7 @@ function renderizarCarta(divCarta, carta) {
 }
 
 
-const mazo = [];
-const mesaJugador = [];
-const mesaCroupier = [];
-let fichasJugador = 500;
-let apuesta = 0;
 
-let estado = "";
-
-let puntuacionTotal = 0;
-
-// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
-// await delay(2000);
 
 const contenedorCrupier = document.getElementById('container-crupier');
 const contenedorJugador = document.getElementById('container-jugador');
@@ -184,10 +176,11 @@ btnHit.addEventListener('click', () => {
 });
 
 btnStand.addEventListener('click', () => {
-    if (estado === "STAND") {
-        stand();
-    }
-    calcularMano(mesaJugador);
+    
+    btnDeal.disabled = true;
+    btnHit.disabled = true;
+    btnStand.disabled = true;
+    btnDouble.disabled = true;
     stand();
 });
 
@@ -199,16 +192,18 @@ btnDeal.addEventListener('click', () => {
 
 function deal(){
     if (apuesta > 0) {
+         
         fichasJugador -= apuesta;
         saldoJugador.textContent = fichasJugador;
 
         apuestaAnterior = apuesta;
+        actualizarEstado("Turno del jugador");
 
         hit(mesaJugador, contenedorJugador, mazo);
         hit(mesaJugador, contenedorJugador, mazo);
 
-        // hit(mesaCroupier, contenedorCrupier, mazo);
-        // hit(mesaCroupier, contenedorCrupier, mazo);
+        // hit(mesaCrupier, contenedorCrupier, mazo);
+        // hit(mesaCrupier, contenedorCrupier, mazo);
 
         btnDeal.disabled = true;
         btnHit.disabled = false;
@@ -219,9 +214,11 @@ function deal(){
         btnSubirApuesta.disabled = true;
 
         mostrarCartas(mesaJugador, contenedorJugador);
-        mostrarCartas(mesaCroupier, contenedorCrupier);
+        mostrarCartas(mesaCrupier, contenedorCrupier);
 
-        actualizarEstado("Turno del jugador");
+        puntajeJugador = calcularMano(mesa);
+        feedbackPuntajeJugador.textContent = puntajeJugador;
+
 
     } else {
         alert("Haz una apuesta primero");
@@ -229,12 +226,7 @@ function deal(){
 }
 
 
-//puntajes y estado
-const puntajeJugador = document.getElementById('puntos-jugador');
-const puntajeCroupier = document.getElementById('puntos-jugador');
-const estadoPartida = document.getElementById('estado-partida');
 
-let apuestaAnterior = 0;
 
 function actualizarEstado(nuevoEstado) {
     estado = nuevoEstado;
@@ -279,10 +271,13 @@ function calcularMano(mesa) {
             }
             if(puntajeTotal > 21){
                 actualizarEstado("BUST");
+                // stand()
             }
         }
         else {
+            //stand
             actualizarEstado("BUST");
+            // stand();
         }
 
     }
@@ -290,9 +285,49 @@ function calcularMano(mesa) {
     return puntajeTotal;
 }
 
+
+function resetearJuego(){
+    saldoJugador.textContent = fichasJugador;
+    mesaCrupier.length = 0;
+    mesaJugador.length = 0;
+    
+    estadoPartida.textContent = "Ingrese una apuesta"
+    feedbackPuntajeJugador.textContent = "---"
+    feedbackPuntajeCrupier.textContent = "---"
+    
+    btnDeal.disabled = false;
+    btnRepetirApuesta.disable = false;
+    btnBajarApuesta.disable = false;
+    btnSubirApuesta.disable = false;
+    
+}
+
+const mazo = [];
+const mesaJugador = [];
+const mesaCrupier = [];
+let fichasJugador = 500;
+let apuesta = 0;
+
+let estado = "";
+
+
+// const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+// await delay(2000);
+
+//puntajes y estado
+const feedbackPuntajeJugador = document.getElementById('puntos-jugador');
+const feedbackPuntajeCrupier = document.getElementById('puntos-jugador');
+const estadoPartida = document.getElementById('estado-partida');
+
+let apuestaAnterior = 0;
+
+let puntajeJugador = 0;
+let puntajeCrupier = 0;
+
+
 function iniciarJuego() {
     mazo.length = 0;
-    mesaCroupier.length = 0;
+    mesaCrupier.length = 0;
     mesaJugador.length = 0;
     fichasJugador = 0;
     apuesta = 0;
@@ -301,10 +336,9 @@ function iniciarJuego() {
     btnStand.disabled = true
     btnDouble.disabled = true;
 
+    generarMazo(mazo);
 
-    generarMazo(mazo, config);
-
-    fichasJugador = 200;
+    fichasJugador = config.fichasIniciales;
     saldoJugador.textContent = fichasJugador;
 
 }
@@ -312,25 +346,12 @@ function iniciarJuego() {
 iniciarJuego()
 
 
+
+
 // const puntajeJugador = document.getElementById('puntos-jugador');
-// const puntajeCroupier = document.getElementById('puntos-jugador');
+// const puntajeCrupier = document.getElementById('puntos-jugador');
 // const estadoPartida = document.getElementById('estado-partida');
 
 
-function resetearJuego(){
-    saldoJugador.textContent = fichasJugador;
-    mesaCroupier.length = 0;
-    mesaJugador.length = 0;
-    
-    estadoPartida.textContent = "Ingrese una apuesta"
-    puntajeJugador.textContent = "?"
-    puntajeCroupier.textContent = "?"
-    
-    btnDeal.disabled = false;
-    btnRepetirApuesta.disable = false;
-    btnBajarApuesta.disable = false;
-    btnSubirApuesta.disable = false;
-    
-    
-}
+
 
