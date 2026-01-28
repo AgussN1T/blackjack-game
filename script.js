@@ -61,8 +61,9 @@ function hit(mesa, contenedor, mazo) {
 
 function stand() {
 
-    
+    btnStand.disabled = true;
     btnHit.disabled = true;
+    btnDouble.disabled = true;
 
     if(estado === "BUST"){
         console.log("perdiste");
@@ -72,9 +73,19 @@ function stand() {
         console.log("blackjack");
     }
 
+    if(puntajeJugador <= 21){
+                setTimeout(() => {
+            resetearJuego();
+
+        }, 4000);
+
+        return;
+    }
+
     setTimeout(() => {
     estadoPartida.textContent = "Turno del crupier";
-    }, tiempoEnMilisegundos);
+
+    }, 4000);
 
 
 
@@ -100,6 +111,16 @@ function doubleDown() {
     return;
 }
 
+
+function pagar(){    
+}
+
+function crupier(){
+
+}
+
+
+
 function mostrarCartas(mesa, contenedor) {
     contenedor.innerHTML = '';
 
@@ -107,6 +128,7 @@ function mostrarCartas(mesa, contenedor) {
         const divCarta = document.createElement('div');
 
         divCarta.classList.add('carta');
+        // divCarta.classList.add('animado');
         if (carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
         renderizarCarta(divCarta, carta);
 
@@ -182,9 +204,8 @@ btnBajarApuesta.addEventListener('click', () => {
     if (apuesta - 25 >= 0) {
         apuesta -= 25;
         actualizarApuesta();
-        btnSubirApuesta.disable = false;
-    }
-    
+        btnSubirApuesta.disabled = false;
+    }    
 
 });
 
@@ -192,10 +213,10 @@ btnSubirApuesta.addEventListener('click', () => {
     if (apuesta + 25 <= fichasJugador) {
         apuesta += 25;
         actualizarApuesta();
-        btnBajarApuesta.disable = false;
+        btnBajarApuesta.disabled = false;
     }
     if(fichasJugador - apuesta === 0){
-        btnSubirApuesta.disable = false;
+        btnSubirApuesta.disabled = false;
     }
 
 });
