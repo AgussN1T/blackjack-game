@@ -127,7 +127,9 @@ body {
   text-align: center;
   margin-bottom: 20px;
   letter-spacing: 2px;
-  color: #d4af37;
+  /* color: #d4af37; */
+  color: #f5e6b8;
+  
 }
 
 
@@ -315,8 +317,6 @@ button:disabled {
 }
 
 
-
-
 .mesa {
       background:
         radial-gradient(circle at center,
@@ -330,20 +330,48 @@ button:disabled {
             rgba(0, 0, 0, 0.02) 4px),
         #0b4f2f;
   border: 3px solid #082e1c;
-  border-radius: 40px;
   padding: 30px;
   display: grid;
   grid-template-rows: auto 1fr auto auto;
   /* grid-template-rows: auto auto auto auto; */
   gap: 25px;
   box-shadow: inset 0 0 40px rgba(0, 0, 0, .6);
+  border-radius: 60px 60px 80px 80px;
+  align-content: start;
 }
+
+
+
+/* .mesa {
+  grid-template-rows: auto auto auto auto;
+  align-content: space-between;
+} */
+
+.mesa {
+  display: grid;
+  grid-template-rows:
+    min-content   /* crupier */
+    min-content   /* feedback */
+    min-content   /* jugador */
+    min-content;  /* controles */
+
+  justify-items: center;
+  gap: 28px;
+}
+
+
 
 .mano {
   background: rgba(0, 0, 0, 0.35);
   border: 2px solid #d4af37;
   border-radius: 30px;
-  padding: 20px;
+  /* padding: 20px; */
+  max-width: 520px;   /* controla el ancho */
+  width: 100%;
+  margin: 0 auto;     /* centra */
+  padding: 14px 20px;
+  height: auto;          /* clave */
+  min-height: 120px;
 }
 
 .mano h3 {
@@ -354,12 +382,26 @@ button:disabled {
   letter-spacing: 1px;
 }
 
+
+.crupier {
+  margin-top: 10px;
+}
+
+.jugador, .crupier{
+  margin-bottom: 10px;
+  min-height: 170px;
+}
+
+
+
 .cartas {
   display: flex;
   gap: 10px;
   justify-content: center;
   min-height: 80px;
   position: relative;
+  overflow: visible;   /* deja que las cartas se salgan visualmente */
+  max-width: 100%;
 }
 
 /* .feedback {
@@ -379,12 +421,30 @@ button:disabled {
   justify-content: space-between; /* ← clave */
   gap: 4px;                       /* antes 8px */
   padding: 10px 0;                /* controla la altura total */
-  min-width: 340px;
   text-align: center;
   font-size: 20px;                /* un pelín menos */
   color: white;
   letter-spacing: 1.5px;
+  padding: 18px;
+  margin: 0;
+  width: 320px;
+  height: 220px;
 }
+
+
+.feedback {
+  width: 320px;
+  height: 220px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 18px;
+}
+
+
 
 .mensaje {
   font-size: clamp(18px, 4vw, 22px);
@@ -674,3 +734,56 @@ button:disabled {
     background-position: 100% 50%;
   }
 }
+
+
+
+
+/* 1. UNIFICAR CARTA */
+.carta {
+  width: 90px;
+  height: 130px;
+  background: linear-gradient(180deg, #ffffff, #f2f2f2);
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  color: #333;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.3);
+  cursor: pointer;
+  margin-left: -60px;
+  transition: all 0.3s ease;
+}
+
+/* 
+.mesa {
+  background: 
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.08) 0%, rgba(0, 0, 0, 0.35) 60%, rgba(0, 0, 0, 0.7) 100%),
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.02) 0, rgba(255, 255, 255, 0.02) 2px, rgba(0, 0, 0, 0.02) 2px, rgba(0, 0, 0, 0.02) 4px),
+    #0b4f2f;
+  border: 3px solid #082e1c;
+  border-radius: 60px 60px 80px 80px;
+  padding: 30px;
+  display: grid;
+  grid-template-rows: repeat(4, min-content);
+  justify-items: center;
+  gap: 28px;
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, .6);
+}
+
+.feedback {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 30px;
+  margin: 20px auto;
+  width: 100%;
+  max-width: 700px;
+  background: radial-gradient(circle at center, #7a0000, #111111, #000000);
+  border: 2px solid #d4af37;
+  border-radius: 14px;
+  box-shadow: 0 0 15px rgba(212, 175, 55, 0.25), inset 0 0 10px rgba(0, 0, 0, 0.6);
+} */
