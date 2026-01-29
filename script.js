@@ -39,20 +39,31 @@ let apuesta = 0;
 let estado = "";
 
 
-function hit(mesa, contenedor, mazo) {
-
-    btnDouble.disabled = true;
-    
+function hitCrupier(mesa, contenedor, mazo) {
     if (mazo.length === 0) generarMazo(mazo);
 
     mesa.push(mazo.splice(0, 1)[0]);
     mostrarCartas(mesa, contenedor);
-    
+
+    puntajeCrupier = calcularMano(mesa);
+
+    feedbackPuntajeCrupier.textContent = puntajeCrupier;
+}
+
+function hit(mesa, contenedor, mazo) {
+
+    btnDouble.disabled = true;
+
+    if (mazo.length === 0) generarMazo(mazo);
+
+    mesa.push(mazo.splice(0, 1)[0]);
+    mostrarCartas(mesa, contenedor);
+
     puntajeJugador = calcularMano(mesa);
 
     feedbackPuntajeJugador.textContent = puntajeJugador;
 
-    if(puntajeJugador === 21 || estado === "BUST"){
+    if (puntajeJugador === 21 || estado === "BUST") {
         stand();
     }
 
@@ -65,33 +76,46 @@ function stand() {
     btnHit.disabled = true;
     btnDouble.disabled = true;
 
-    if(estado === "BUST"){
-        console.log("perdiste");
-    }
-
-    if(estado === "BLACKJACK"){
-        console.log("blackjack");
-    }
-
-    if(puntajeJugador <= 21){
-                setTimeout(() => {
+    if (estado === "BUST") {
+        setTimeout(() => {
+            // estadoPartida.textContent = "";
+            console.log(puntajeJugador);
             resetearJuego();
-
         }, 4000);
-
         return;
     }
 
-    setTimeout(() => {
-    estadoPartida.textContent = "Turno del crupier";
+    if (estado === "BLACKJACK") {
+        setTimeout(() => {
+            pagar(apuesta + (apuesta * 1.5));
+            resetearJuego();
+        }, 4000);
+        return;
+    }
 
-    }, 4000);
+    if (puntajeJugador <= 21) {
+        setTimeout(() => {
+            pagar(apuesta * 2);
+            resetearJuego();
+        }, 4000);
+        return;
+    }
 
-
-
-
-    console.log(puntajeJugador);
 }
+
+function pagar(monto) {
+    fichasJugador += monto;
+    saldoJugador.textContent = fichasJugador;
+    console.log(monto);
+}
+
+function crupier() {
+    puntajeCrupier = calcularMano();
+    if(puntajeCrupier<17){
+        
+    }
+}
+
 
 function doubleDown() {
 
@@ -110,16 +134,6 @@ function doubleDown() {
     }
     return;
 }
-
-
-function pagar(){    
-}
-
-function crupier(){
-
-}
-
-
 
 function mostrarCartas(mesa, contenedor) {
     contenedor.innerHTML = '';
@@ -192,20 +206,46 @@ const contenedorJugador = document.getElementById('container-jugador');
 // Apuestas
 const saldoJugador = document.getElementById('saldo');
 const valorApuesta = document.getElementById('valor-apuesta');
+
+
 const btnBajarApuesta = document.getElementById('btn-bajar-apuesta');
 const btnSubirApuesta = document.getElementById('btn-subir-apuesta');
 const btnRepetirApuesta = document.getElementById('btn-repetir-apuesta');
 
+
+
+
 function actualizarApuesta() {
     valorApuesta.textContent = apuesta;
 }
+
+btnRepetirApuesta.addEventListener('click', () => {
+    if (apuestaAnterior >= fichasJugador) {
+        apuesta = apuestaAnterior;
+        actualizarApuesta();
+
+
+        if (apuestaAnterior === fichasJugador) {
+            btnSubirApuesta.disabled = false;
+        }
+
+    }
+
+});
+
+
 
 btnBajarApuesta.addEventListener('click', () => {
     if (apuesta - 25 >= 0) {
         apuesta -= 25;
         actualizarApuesta();
         btnSubirApuesta.disabled = false;
-    }    
+    }
+
+    if (apuesta === 0) {
+        btnDeal.disabled = true;
+        btnBajarApuesta.disabled = true;
+    }
 
 });
 
@@ -214,9 +254,10 @@ btnSubirApuesta.addEventListener('click', () => {
         apuesta += 25;
         actualizarApuesta();
         btnBajarApuesta.disabled = false;
+        btnDeal.disabled = false;
     }
-    if(fichasJugador - apuesta === 0){
-        btnSubirApuesta.disabled = false;
+    if (fichasJugador - apuesta === 0) {
+        btnSubirApuesta.disabled = true;
     }
 
 });
@@ -232,11 +273,12 @@ btnHit.addEventListener('click', () => {
 });
 
 btnStand.addEventListener('click', () => {
-    
+
     btnDeal.disabled = true;
     btnHit.disabled = true;
     btnStand.disabled = true;
     btnDouble.disabled = true;
+
     stand();
 });
 
@@ -246,9 +288,9 @@ btnDeal.addEventListener('click', () => {
 });
 
 
-function deal(){
+function deal() {
     if (apuesta > 0) {
-         
+
         fichasJugador -= apuesta;
         saldoJugador.textContent = fichasJugador;
 
@@ -258,8 +300,8 @@ function deal(){
         hit(mesaJugador, contenedorJugador, mazo);
         hit(mesaJugador, contenedorJugador, mazo);
 
-        // hit(mesaCrupier, contenedorCrupier, mazo);
-        // hit(mesaCrupier, contenedorCrupier, mazo);
+        // hitCrupier(mesaCrupier, contenedorCrupier, mazo);
+        // hitCrupier(mesaCrupier, contenedorCrupier, mazo);
 
         btnDeal.disabled = true;
         btnHit.disabled = false;
@@ -296,6 +338,8 @@ function calcularMano(mesa) {
     let puntajeTotal = 0;
     let cantAses = 0;
 
+    if (mesa.length === 0) return 0;
+
     for (let i = 0; i < mesa.length; i++) {
         if (mesa[i].valor === 1) {
             puntajeTotal += 11;
@@ -322,55 +366,61 @@ function calcularMano(mesa) {
         if (cantAses > 0) {
             for (let i = 0; i < cantAses; i++) {
                 puntajeTotal -= 10;
-                if(puntajeTotal <= 21){
+                if (puntajeTotal <= 21) {
                     break;
                 }
             }
-            if(puntajeTotal > 21){
+            if (puntajeTotal > 21) {
                 actualizarEstado("BUST");
-                // stand()
             }
         }
         else {
-            //stand
             actualizarEstado("BUST");
-            // stand();
         }
 
     }
-    
+
     return puntajeTotal;
 }
 
 
-function resetearJuego(){
-    saldoJugador.textContent = fichasJugador;
-    mesaCrupier.length = 0;
-    mesaJugador.length = 0;
-    
-    estadoPartida.textContent = "Ingrese una apuesta"
-    feedbackPuntajeJugador.textContent = "---"
-    feedbackPuntajeCrupier.textContent = "---"
-    
-    btnDeal.disabled = false;
-    btnRepetirApuesta.disable = false;
-    btnBajarApuesta.disable = false;
-    btnSubirApuesta.disable = false;
-    
-}
+
 
 // const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 // await delay(2000);
 
 //puntajes y estado
 const feedbackPuntajeJugador = document.getElementById('puntos-jugador');
-const feedbackPuntajeCrupier = document.getElementById('puntos-jugador');
+const feedbackPuntajeCrupier = document.getElementById('puntos-crupier');
 const estadoPartida = document.getElementById('estado-partida');
 
 let apuestaAnterior = 0;
 
 let puntajeJugador = 0;
 let puntajeCrupier = 0;
+
+function resetearJuego() {
+    apuestaAnterior = apuesta;
+    apuesta = 0;
+    estado = "";
+
+    saldoJugador.textContent = fichasJugador;
+
+    mesaCrupier.length = 0;
+    mesaJugador.length = 0;
+    mostrarCartas(mesaJugador, contenedorJugador);
+    mostrarCartas(mesaCrupier, contenedorCrupier);
+
+    estadoPartida.textContent = "Ingrese una apuesta"
+    feedbackPuntajeJugador.textContent = "---"
+    feedbackPuntajeCrupier.textContent = "---"
+    valorApuesta.textContent = 0;
+
+    btnRepetirApuesta.disabled = false;
+    btnBajarApuesta.disabled = true;
+    btnSubirApuesta.disabled = false;
+
+}
 
 
 function iniciarJuego() {
@@ -380,9 +430,12 @@ function iniciarJuego() {
     fichasJugador = 0;
     apuesta = 0;
 
+    btnDeal.disabled = true;
     btnHit.disabled = true;
     btnStand.disabled = true
     btnDouble.disabled = true;
+
+    btnBajarApuesta.disabled = true;
 
     generarMazo(mazo);
 
