@@ -404,45 +404,7 @@ button:disabled {
   max-width: 100%;
 }
 
-/* .feedback {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  font-size: 22px;
-  color: white;
-  letter-spacing: 2px;
-} */
 
-.feedback {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between; /* ← clave */
-  gap: 4px;                       /* antes 8px */
-  padding: 10px 0;                /* controla la altura total */
-  text-align: center;
-  font-size: 20px;                /* un pelín menos */
-  color: white;
-  letter-spacing: 1.5px;
-  padding: 18px;
-  margin: 0;
-  width: 320px;
-  height: 220px;
-}
-
-
-.feedback {
-  width: 320px;
-  height: 220px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 20px;
-  border-radius: 18px;
-}
 
 
 
@@ -547,8 +509,36 @@ button:disabled {
 
 
 
+/* 
+.feedback {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between; 
+  gap: 4px;                       
+  padding: 10px 0;                
+  text-align: center;
+  font-size: 20px;                
+  color: white;
+  letter-spacing: 1.5px;
+  padding: 18px;
+  margin: 0;
+  width: 320px;
+  height: 220px;
+}
 
 
+.feedback {
+  width: 320px;
+  height: 220px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  border-radius: 18px;
+}
 
 
 .feedback {
@@ -560,11 +550,7 @@ button:disabled {
   margin: 20px auto;
   max-width: 700px;
 
-  /* background: linear-gradient(
-    135deg,
-    #4b0000,
-    #7a0a0a
-  ); */
+ 
 
   background: radial-gradient(
   circle at center,
@@ -582,6 +568,51 @@ button:disabled {
 
   font-family: "Playfair Display", serif;
 }
+ */
+
+
+.feedback {
+  width: 320px;
+  min-height: 160px;          /* más bajo */
+  margin: 20px auto;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+
+  padding: 16px 18px;
+  gap: 6px;
+
+  text-align: center;
+  font-size: 20px;
+  letter-spacing: 1.5px;
+  color: white;
+
+  background: radial-gradient(
+    circle at center,
+    #7a0000,
+    #111111,
+    #000000
+  );
+
+  border: 2px solid #d4af37;
+  border-radius: 14px;
+
+  box-shadow:
+    0 0 15px rgba(212, 175, 55, 0.25),
+    inset 0 0 10px rgba(0, 0, 0, 0.6);
+
+  font-family: "Playfair Display", serif;
+}
+
+/* reset de márgenes internos */
+.feedback p,
+.feedback div {
+  margin: 0;}
+
+
+
 
 .puntos {
   color: #f5e6b8;
@@ -608,12 +639,6 @@ button:disabled {
 
   text-shadow: 0 0 8px rgba(212, 175, 55, 0.5);
 }
-
-
-
-
-
-
 
 
 
@@ -736,10 +761,208 @@ button:disabled {
 }
 
 
+/* MODAAAAAL */
+
+
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.65);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+/* oculto */
+.hidden {
+  display: none;
+}
+
+/* caja principal */
+.modal-content {
+  display: flex;
+  gap: 28px;
+  padding: 28px 32px;
+  border-radius: 18px;
+  max-width: 520px;
+  width: 90%;
+
+  background: radial-gradient(
+    circle at center,
+    #7a0000,
+    #111111,
+    #000000
+  );
+
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.7);
+  color: #f5e6b8;
+}
+
+/* imagen flotante */
+.modal-imagen {
+  display: flex;
+  align-items: center;
+  animation: flotar 4s ease-in-out infinite;
+}
+
+.modal-imagen img {
+  width: 160px;
+  filter: drop-shadow(0 15px 25px rgba(0, 0, 0, 0.6));
+}
+
+/* columna derecha */
+.modal-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 16px;
+}
+
+/* mensaje tipo "pensamiento" */
+.mensaje {
+  padding: 10px 16px;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.4);
+  text-align: center;
+  font-size: 18px;
+  position: relative;
+}
+
+/* globito */
+.mensaje::after {
+  content: "";
+  position: absolute;
+  bottom: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 14px;
+  height: 14px;
+  background: inherit;
+  rotate: 45deg;
+}
+
+/* botón */
+/* .btn-reintentar {
+  padding: 10px 18px;
+  border-radius: 10px;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  background: #f5e6b8;
+  color: #111;
+} */
+
+/* animación flotante */
+@keyframes flotar {
+  0% {
+    transform: translateY(0px) rotateZ(-3deg);
+  }
+  50% {
+    transform: translateY(-10px) rotateZ(3deg);
+  }
+  100% {
+    transform: translateY(0px) rotateZ(-3deg);
+  }
+}
+
+
+
+button.joker-btn {
+  position: relative;
+  padding: 12px 35px;
+  background: #fec195;
+  font-size: 17px;
+  font-weight: 500;
+  color: #181818;
+  border: 3px solid #fec195;
+  border-radius: 8px;
+  box-shadow: 0 0 0 #fec1958c;
+  transition: all 0.3s ease-in-out;
+  cursor: pointer;
+  overflow: visible;
+  font-weight: bold;
+}
+
+/* 🎴 Comodines */
+.joker {
+  position: absolute;
+  font-size: 20px;
+  line-height: 1;
+  filter: drop-shadow(0 0 0 #fffdef);
+  z-index: -5;
+  transition: all 1s cubic-bezier(0.05, 0.83, 0.43, 0.96);
+  pointer-events: none;
+}
+
+/* Posiciones iniciales */
+.star-1 { top: 20%; left: 20%; }
+.star-2 { top: 45%; left: 45%; font-size: 14px; }
+.star-3 { top: 40%; left: 40%; font-size: 10px; }
+.star-4 { top: 20%; left: 40%; font-size: 12px; }
+.star-5 { top: 25%; left: 45%; font-size: 16px; }
+.star-6 { top: 5%;  left: 50%; font-size: 10px; }
+
+/* Hover botón */
+button.joker-btn:hover {
+  background: transparent;
+  color: #fec195;
+  box-shadow: 0 0 25px #fec1958c;
+}
+
+/* ✨ Animación hover */
+button.joker-btn:hover .star-1 {
+  top: -80%;
+  left: -30%;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px #fffdef);
+}
+
+button.joker-btn:hover .star-2 {
+  top: -25%;
+  left: 10%;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px #fffdef);
+}
+
+button.joker-btn:hover .star-3 {
+  top: 55%;
+  left: 25%;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px #fffdef);
+}
+
+button.joker-btn:hover .star-4 {
+  top: 30%;
+  left: 80%;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px #fffdef);
+}
+
+button.joker-btn:hover .star-5 {
+  top: 25%;
+  left: 115%;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px #fffdef);
+}
+
+button.joker-btn:hover .star-6 {
+  top: 5%;
+  left: 60%;
+  z-index: 2;
+  filter: drop-shadow(0 0 10px #fffdef);
+}
+
+
+
+
+
+
+
 
 
 /* 1. UNIFICAR CARTA */
-.carta {
+/* .carta {
   width: 90px;
   height: 130px;
   background: linear-gradient(180deg, #ffffff, #f2f2f2);
@@ -756,7 +979,7 @@ button:disabled {
   cursor: pointer;
   margin-left: -60px;
   transition: all 0.3s ease;
-}
+} */
 
 /* 
 .mesa {

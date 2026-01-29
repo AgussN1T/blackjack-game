@@ -443,7 +443,26 @@ let apuestaAnterior = 0;
 let puntajeJugador = 0;
 let puntajeCrupier = 0;
 
+
+// document.getElementById("modal-derrota").classList.add("hidden");
+
+const btnModalReintentar = document.querySelector('.joker-btn');
+
+  btnModalReintentar.addEventListener('click', () => {
+    btnModalReintentar.classList.add('clicked');
+
+    setTimeout(() => {
+      btnModalReintentar.classList.remove('clicked');
+      location.reload();
+    }, 600);
+  });
+
+
+
 function resetearJuego() {
+
+    if(fichasJugador === 0) document.getElementById("modal-derrota").classList.remove("hidden");
+
     apuestaAnterior = apuesta;
 
 

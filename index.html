@@ -27,7 +27,7 @@
           </div>
         </div>
 
-        
+
 
         <button id="btn-repetir-apuesta" class="btn-repetir" disabled>
           Repetir apuesta
@@ -35,9 +35,9 @@
 
         <div class="separador"></div>
 
-         <p><span>Puntuacion: </span><span id="puntuacion">--</span></p>
-         <p><span>Manos ganadas: </span><span id="manos-ganadas">--</span></p>
-         <p><span>Manos perdidas: </span><span id="manos-perdidas">--</span></p>
+        <p><span>Puntuacion: </span><span id="puntuacion">--</span></p>
+        <p><span>Manos ganadas: </span><span id="manos-ganadas">--</span></p>
+        <p><span>Manos perdidas: </span><span id="manos-perdidas">--</span></p>
 
       </div>
 
@@ -60,7 +60,6 @@
 
     <main class="mesa">
       <div class="crupier mano">
-        <!-- <h3>Crupier</h3> -->
         <div id="container-crupier" class="cartas"></div>
       </div>
 
@@ -79,7 +78,6 @@
       </div>
 
       <div class="jugador mano">
-        <!-- <h3>Jugador</h3> -->
         <div id="container-jugador" class="cartas"></div>
       </div>
 
@@ -94,6 +92,33 @@
 
 
 
+
+  <div id="modal-derrota" class="modal hidden">
+    <div class="modal-content">
+
+      <div class="modal-imagen">
+        <img src="assets\joker.png" alt="Derrota">
+      </div>
+
+      <div class="modal-info">
+        <div class="mensaje">
+          Te quedaste sin fichas...
+        </div>
+
+        <button class="joker-btn">
+          Reintentar 🃏
+          <span class="joker star-1">♦️</span>
+          <span class="joker star-2">♠️</span>
+          <span class="joker star-3">♦️</span>
+          <span class="joker star-4">♥️</span>
+          <span class="joker star-5">♣️</span>
+          <span class="joker star-6">♠️</span>
+        </button>
+
+      </div>
+
+    </div>
+  </div>
 </body>
 <script type="module" src="script.js"></script>
 
