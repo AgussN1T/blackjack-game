@@ -256,7 +256,7 @@ function actualizarApuesta() {
 btnRepetirApuesta.addEventListener('click', () => {
     if (apuestaAnterior <= fichasJugador) {
         apuesta = apuestaAnterior;
-
+        btnBajarApuesta.disabled = false;
         actualizarApuesta();
         btnDeal.disabled = false;
 
