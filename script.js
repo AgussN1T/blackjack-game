@@ -13,18 +13,9 @@ function generarMazo(mazo) {
         }
     }
 
-    let cantCartas = cartasTotales.length;
-    for (let i = 0; i < cantCartas; i++) {
-        let indexR = Math.floor(Math.random() * cartasTotales.length);
-        let carta = cartasTotales.splice(indexR, 1)[0];
-        mazo.push(carta);
-
-    }
-
     while (cartasTotales.length > 0) {
-        let indexR = Math.floor(Math.random() * cartasTotales.length);
-        let carta = cartasTotales.splice(indexR, 1)[0];
-        mazo.push(carta);
+        const index = Math.floor(Math.random() * cartasTotales.length);
+        mazo.push(cartasTotales.splice(index, 1)[0]);
     }
 
 }
@@ -541,12 +532,6 @@ function iniciarJuego() {
 
 iniciarJuego()
 
-
-
-
-// const puntajeJugador = document.getElementById('puntos-jugador');
-// const puntajeCrupier = document.getElementById('puntos-jugador');
-// const estadoPartida = document.getElementById('estado-partida');
 
 
 
