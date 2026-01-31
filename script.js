@@ -115,24 +115,24 @@ async function stand() {
     btnDouble.disabled = true;
 
     if (juego.puntajeJugador === "BUST") {
-        finalizarRonda("La Casa Gana", 0)
+        finalizarRonda("La Casa Gana", 0);
         return;
     }
 
     await crupier();
 
     if (juego.puntajeJugador === juego.puntajeCrupier) {
-        finalizarRonda("PUSH", 0)
+        finalizarRonda("PUSH", juego.apuesta);
         return;
     }
 
     if (juego.puntajeCrupier === "BUST") {
-        finalizarRonda("El Jugador Gana " + juego.apuesta * 2)
+        finalizarRonda("El Jugador Gana " + juego.apuesta * 2);
         return;
     }
 
     if (juego.puntajeJugador === "BLACKJACK" && juego.puntajeCrupier != "BLACKJACK") {
-        finalizarRonda("El Jugador Gana " + juego.apuesta * 2.5)
+        finalizarRonda("El Jugador Gana " + juego.apuesta * 2.5);
         return;
     }
 
@@ -362,6 +362,7 @@ function deal() {
 
         hit(juego.mesaCrupier, contenedorCrupier);
         juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
+        console.log(juego.mesaCrupier.length);
         // calculamos el puntaje para la primera carta antes de agarrar la segunda
         hit(juego.mesaCrupier, contenedorCrupier);
         mostrarCartas(juego.mesaCrupier, contenedorCrupier, true);
