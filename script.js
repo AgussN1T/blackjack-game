@@ -30,18 +30,22 @@ function generarMazo(mazo) {
 }
 
 
-const mazo = [];
-const mesaJugador = [];
-const mesaCrupier = [];
-let fichasJugador = 500;
+
 let apuesta = 0;
+
+const juego = {
+    mazo: [],
+    mesaJugador: [],
+    mesaCrupier: [],
+    fichasJugador: 0
+}
 
 let estado = "";
 
 
 function hit(mesa, contenedor) {
-    if (mazo.length === 0) generarMazo(mazo);
-    mesa.push(mazo.shift());
+    if (juego.mazo.length === 0) generarMazo(juego.mazo);
+    mesa.push(juego.mazo.shift());
     mostrarCartas(mesa, contenedor);
 
     return calcularMano(mesa);
@@ -52,8 +56,8 @@ async function crupier() {
     if (puntajeCrupier === "BLACKJACK") return;
 
     while (puntajeCrupier < 17 && puntajeCrupier != "BUST") {
-        puntajeCrupier = hit(mesaCrupier, contenedorCrupier);
-        mostrarCartas(mesaCrupier, contenedorCrupier);
+        puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
+        mostrarCartas(juego.mesaCrupier, contenedorCrupier);
         feedbackPuntajeCrupier.textContent = puntajeCrupier;
         await delay(1000);
     }
@@ -67,8 +71,8 @@ async function crupier() {
     }
     else {
         while (puntajeCrupier < puntajeJugador && puntajeCrupier != "BUST") {
-            puntajeCrupier = hit(mesaCrupier, contenedorCrupier);
-            mostrarCartas(mesaCrupier, contenedorCrupier);
+            puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
+            mostrarCartas(juego.mesaCrupier, contenedorCrupier);
             feedbackPuntajeCrupier.textContent = puntajeCrupier;
             await delay(1000);
         }
@@ -109,7 +113,7 @@ async function stand() {
             pagar(apuesta * 2);
             resetearJuego();
         }, 4000);
-        actualizarEstado("El Jugador Gana");
+        actualizarEstado("El Jugador Gana " + apuesta * 2);
         return;
     }
 
@@ -118,7 +122,7 @@ async function stand() {
             pagar(apuesta * 2.5);
             resetearJuego();
         }, 4000);
-        actualizarEstado("El Jugador Gana");
+        actualizarEstado("El Jugador Gana " + apuesta * 2.5);
         return;
 
     }
@@ -128,7 +132,7 @@ async function stand() {
             pagar(apuesta * 2);
             resetearJuego();
         }, 4000);
-        actualizarEstado("El Jugador Gana");
+        actualizarEstado("El Jugador Gana" + apuesta * 2);
         return;
     }
     else {
@@ -143,21 +147,21 @@ async function stand() {
 }
 
 function pagar(monto) {
-    fichasJugador += monto;
-    saldoJugador.textContent = fichasJugador;
+    juego.fichasJugador += monto;
+    saldoJugador.textContent = juego.fichasJugador;
     // console.log(monto);
 }
 
 function doubleDown() {
 
-    if (fichasJugador >= apuesta * 2) {
+    if (juego.fichasJugador >= apuesta * 2) {
         btnHit.disabled = true;
         btnStand.disabled = true;
         btnDouble.disabled = true;
 
-        fichasJugador -= apuesta;
+        juego.fichasJugador -= apuesta;
         apuesta = apuesta * 2;
-        puntajeJugador = hit(mesaJugador, contenedorJugador);
+        puntajeJugador = hit(juego.mesaJugador, contenedorJugador);
         feedbackPuntajeJugador.textContent = puntajeJugador;
         stand();
 
@@ -185,51 +189,68 @@ function mostrarCartas(mesa, contenedor) {
     });
 }
 
-function renderizarCarta(divCarta, carta) {
+    const MAPA_CARTAS = {
+        1: "A",
+        11: "J",
+        12: "Q",
+        13: "K"
+    };
 
-    if (carta.valor === 1) {
-        divCarta.innerHTML = `
-        <div class="valor arriba">A</div>
-        <div class="palo">${carta.palo}</div>
-        <div class="valor abajo">A</div>
-    `;
-        return;
-    }
+    function renderizarCarta(divCarta, carta) {
+        const valor = MAPA_CARTAS[carta.valor] ?? carta.valor;
 
-    if (carta.valor <= 10) {
         divCarta.innerHTML = `
-        <div class="valor arriba">${carta.valor}</div>
-        <div class="palo">${carta.palo}</div>
-        <div class="valor abajo">${carta.valor}</div>
-    `;
-        return;
+            <div class="valor arriba">${valor}</div>
+            <div class="palo">${carta.palo}</div>
+            <div class="valor abajo">${valor}</div>
+        `;
     }
 
-    if (carta.valor === 11) {
-        divCarta.innerHTML = `
-        <div class="valor arriba">J</div>
-        <div class="palo">${carta.palo}</div>
-        <div class="valor abajo">J</div>
-    `;
-        return;
-    }
-    if (carta.valor === 12) {
-        divCarta.innerHTML = `
-        <div class="valor arriba">Q</div>
-        <div class="palo">${carta.palo}</div>
-        <div class="valor abajo">Q</div>
-    `;
-        return;
-    }
-    if (carta.valor === 13) {
-        divCarta.innerHTML = `
-        <div class="valor arriba">K</div>
-        <div class="palo">${carta.palo}</div>
-        <div class="valor abajo">K</div>
-    `;
-        return;
-    }
-}
+// function renderizarCarta(divCarta, carta) {
+
+//     if (carta.valor === 1) {
+//         divCarta.innerHTML = `
+//         <div class="valor arriba">A</div>
+//         <div class="palo">${carta.palo}</div>
+//         <div class="valor abajo">A</div>
+//     `;
+//         return;
+//     }
+
+//     if (carta.valor <= 10) {
+//         divCarta.innerHTML = `
+//         <div class="valor arriba">${carta.valor}</div>
+//         <div class="palo">${carta.palo}</div>
+//         <div class="valor abajo">${carta.valor}</div>
+//     `;
+//         return;
+//     }
+
+//     if (carta.valor === 11) {
+//         divCarta.innerHTML = `
+//         <div class="valor arriba">J</div>
+//         <div class="palo">${carta.palo}</div>
+//         <div class="valor abajo">J</div>
+//     `;
+//         return;
+//     }
+//     if (carta.valor === 12) {
+//         divCarta.innerHTML = `
+//         <div class="valor arriba">Q</div>
+//         <div class="palo">${carta.palo}</div>
+//         <div class="valor abajo">Q</div>
+//     `;
+//         return;
+//     }
+//     if (carta.valor === 13) {
+//         divCarta.innerHTML = `
+//         <div class="valor arriba">K</div>
+//         <div class="palo">${carta.palo}</div>
+//         <div class="valor abajo">K</div>
+//     `;
+//         return;
+//     }
+// }
 
 
 
@@ -254,13 +275,13 @@ function actualizarApuesta() {
 }
 
 btnRepetirApuesta.addEventListener('click', () => {
-    if (apuestaAnterior <= fichasJugador) {
+    if (apuestaAnterior <= juego.fichasJugador) {
         apuesta = apuestaAnterior;
         btnBajarApuesta.disabled = false;
         actualizarApuesta();
         btnDeal.disabled = false;
 
-        if (apuestaAnterior === fichasJugador) {
+        if (apuestaAnterior === juego.fichasJugador) {
             btnSubirApuesta.disabled = false;
         }
 
@@ -285,13 +306,13 @@ btnBajarApuesta.addEventListener('click', () => {
 });
 
 btnSubirApuesta.addEventListener('click', () => {
-    if (apuesta + 25 <= fichasJugador) {
+    if (apuesta + 25 <= juego.fichasJugador) {
         apuesta += 25;
         actualizarApuesta();
         btnBajarApuesta.disabled = false;
         btnDeal.disabled = false;
     }
-    if (fichasJugador - apuesta === 0) {
+    if (juego.fichasJugador - apuesta === 0) {
         btnSubirApuesta.disabled = true;
     }
 
@@ -304,7 +325,7 @@ const btnStand = document.getElementById('btn-stand');
 const btnDouble = document.getElementById('btn-double');
 
 btnHit.addEventListener('click', () => {
-    puntajeJugador = hit(mesaJugador, contenedorJugador);
+    puntajeJugador = hit(juego.mesaJugador, contenedorJugador);
     feedbackPuntajeJugador.textContent = puntajeJugador;
     if (puntajeJugador === "BLACKJACK" || puntajeJugador === 21 || estado === "BUST") {
         stand();
@@ -330,16 +351,16 @@ btnDeal.addEventListener('click', () => {
 function deal() {
     if (apuesta > 0) {
 
-        fichasJugador -= apuesta;
-        saldoJugador.textContent = fichasJugador;
+        juego.fichasJugador -= apuesta;
+        saldoJugador.textContent = juego.fichasJugador;
 
         apuestaAnterior = apuesta;
         actualizarEstado("Turno del jugador");
 
-        hit(mesaJugador, contenedorJugador);
-        hit(mesaJugador, contenedorJugador);
+        hit(juego.mesaJugador, contenedorJugador);
+        hit(juego.mesaJugador, contenedorJugador);
         
-        hit(mesaCrupier,contenedorCrupier);
+        hit(juego.mesaCrupier,contenedorCrupier);
 
         btnDeal.disabled = true;
         btnHit.disabled = false;
@@ -349,11 +370,11 @@ function deal() {
         btnBajarApuesta.disabled = true;
         btnSubirApuesta.disabled = true;
 
-        mostrarCartas(mesaJugador, contenedorJugador);
-        mostrarCartas(mesaCrupier,contenedorCrupier);
+        mostrarCartas(juego.mesaJugador, contenedorJugador);
+        mostrarCartas(juego.mesaCrupier,contenedorCrupier);
 
-        puntajeCrupier = calcularMano(mesaCrupier);
-        puntajeJugador = calcularMano(mesaJugador);
+        puntajeCrupier = calcularMano(juego.mesaCrupier);
+        puntajeJugador = calcularMano(juego.mesaJugador);
 
         feedbackPuntajeJugador.textContent = puntajeJugador;
         feedbackPuntajeCrupier.textContent = puntajeCrupier;
@@ -461,7 +482,7 @@ const btnModalReintentar = document.querySelector('.joker-btn');
 
 function resetearJuego() {
 
-    if(fichasJugador === 0) document.getElementById("modal-derrota").classList.remove("hidden");
+    if(juego.fichasJugador === 0) document.getElementById("modal-derrota").classList.remove("hidden");
 
     apuestaAnterior = apuesta;
 
@@ -469,12 +490,12 @@ function resetearJuego() {
     apuesta = 0;
     estado = "";
 
-    saldoJugador.textContent = fichasJugador;
+    saldoJugador.textContent = juego.fichasJugador;
 
-    mesaCrupier.length = 0;
-    mesaJugador.length = 0;
-    mostrarCartas(mesaJugador, contenedorJugador);
-    mostrarCartas(mesaCrupier, contenedorCrupier);
+    juego.mesaCrupier.length = 0;
+    juego.mesaJugador.length = 0;
+    mostrarCartas(juego.mesaJugador, contenedorJugador);
+    mostrarCartas(juego.mesaCrupier, contenedorCrupier);
 
     estadoPartida.textContent = "Ingrese una apuesta"
     feedbackPuntajeJugador.textContent = "---"
@@ -489,11 +510,12 @@ function resetearJuego() {
 
 
 function iniciarJuego() {
-    mazo.length = 0;
-    mesaCrupier.length = 0;
-    mesaJugador.length = 0;
-    fichasJugador = 0;
+    juego.mazo.length = 0;
+    juego.mesaCrupier.length = 0;
+    juego.mesaJugador.length = 0;
+    juego.fichasJugador = config.fichasIniciales;
     apuesta = 0;
+
 
     btnDeal.disabled = true;
     btnHit.disabled = true;
@@ -502,10 +524,10 @@ function iniciarJuego() {
 
     btnBajarApuesta.disabled = true;
 
-    generarMazo(mazo);
+    generarMazo(juego.mazo);
 
-    fichasJugador = config.fichasIniciales;
-    saldoJugador.textContent = fichasJugador;
+    juego.fichasJugador = config.fichasIniciales;
+    saldoJugador.textContent = juego.fichasJugador;
 
 }
 
