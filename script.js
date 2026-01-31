@@ -362,7 +362,6 @@ function deal() {
 
         hit(juego.mesaCrupier, contenedorCrupier);
         juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
-        console.log(juego.mesaCrupier.length);
         // calculamos el puntaje para la primera carta antes de agarrar la segunda
         hit(juego.mesaCrupier, contenedorCrupier);
         mostrarCartas(juego.mesaCrupier, contenedorCrupier, true);
