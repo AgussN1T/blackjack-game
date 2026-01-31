@@ -161,6 +161,10 @@ function doubleDown() {
 
         juego.fichasJugador -= apuesta;
         apuesta = apuesta * 2;
+
+        actualizarApuesta(); 
+        saldoJugador.textContent = juego.fichasJugador;
+
         puntajeJugador = hit(juego.mesaJugador, contenedorJugador);
         feedbackPuntajeJugador.textContent = puntajeJugador;
         stand();
@@ -378,6 +382,10 @@ function deal() {
 
         feedbackPuntajeJugador.textContent = puntajeJugador;
         feedbackPuntajeCrupier.textContent = puntajeCrupier;
+        
+        if(puntajeJugador === "BLACKJACK") stand();
+
+
     } else {
         alert("Haz una apuesta primero");
     }
