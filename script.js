@@ -38,7 +38,7 @@ const juego = {
 function hit(mesa, contenedor) {
     if (juego.mazo.length === 0) generarMazo(juego.mazo);
     mesa.push(juego.mazo.shift());
-    mostrarCartas(mesa, contenedor);
+    mostrarCartas(mesa, contenedor, false);
 
     return calcularMano(mesa);
 }
@@ -46,8 +46,8 @@ function hit(mesa, contenedor) {
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function crupier() {
-
-    if(juego.puntajeJugador === "BLACKJACK" && juego.mesaCrupier.length === 2 && juego.puntajeCrupier != "BLACKJACK")  return;
+/* 
+    if (juego.puntajeJugador === "BLACKJACK" && juego.mesaCrupier.length === 2 && juego.puntajeCrupier != "BLACKJACK") return;
 
     if (juego.puntajeCrupier === "BLACKJACK") return;
 
@@ -73,37 +73,40 @@ async function crupier() {
             await delay(1000);
         }
     }
-
-/* 
-    if (
-        juego.mesaCrupier.length === 2 &&
-        puntajeJugador === "BLACKJACK" &&
-        puntajeCrupier !== "BLACKJACK"
-    ) return;
-
-    if (puntajeCrupier === "BLACKJACK") return;
-
-    const pedirCarta = async () => {
-        puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
-        mostrarCartas(juego.mesaCrupier, contenedorCrupier);
-        feedbackPuntajeCrupier.textContent = puntajeCrupier;
-        await delay(1000);
-    };
-
-    while (puntajeCrupier < 17 && puntajeCrupier !== "BUST") {
-        await pedirCarta();
-    }
-
-    if (puntajeCrupier === "BUST" || puntajeCrupier > puntajeJugador) return;
-
-    while (puntajeCrupier < puntajeJugador && puntajeCrupier !== "BUST") {
-        await pedirCarta();
-    }
  */
 
+        juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
+        mostrarCartas(juego.mesaCrupier, contenedorCrupier, false);
+        feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
+        await delay(1000);
+
+        if (
+            juego.mesaCrupier.length === 2 &&
+            juego.puntajeJugador === "BLACKJACK" &&
+            juego.puntajeCrupier !== "BLACKJACK"
+        ) return;
+    
+        if (juego.puntajeCrupier === "BLACKJACK") return;
+    
+        const pedirCarta = async () => {
+            juego.puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
+            mostrarCartas(juego.mesaCrupier, contenedorCrupier, false);
+            feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
+            await delay(1000);
+        };
+    
+        while (juego.puntajeCrupier < 17 && juego.puntajeCrupier !== "BUST") {
+            await pedirCarta();
+        }
+    
+        if (juego.puntajeCrupier === "BUST" || juego.puntajeCrupier > juego.puntajeJugador) return;
+    
+        while (juego.puntajeCrupier < juego.puntajeJugador && juego.puntajeCrupier !== "BUST") {
+            await pedirCarta();
+        }
+     
     return;
 }
-
 
 async function stand() {
 
@@ -112,7 +115,7 @@ async function stand() {
     btnDouble.disabled = true;
 
     if (juego.puntajeJugador === "BUST") {
-        finalizarRonda("La Casa Gana", 0)        
+        finalizarRonda("La Casa Gana", 0)
         return;
     }
 
@@ -139,7 +142,7 @@ async function stand() {
     }
     else {
 
-        finalizarRonda("La Casa Gana",0);
+        finalizarRonda("La Casa Gana", 0);
         return;
     }
 }
@@ -172,7 +175,7 @@ function doubleDown() {
         juego.fichasJugador -= juego.apuesta;
         juego.apuesta = juego.apuesta * 2;
 
-        actualizarApuesta(); 
+        actualizarApuesta();
         saldoJugador.textContent = juego.fichasJugador;
 
         juego.puntajeJugador = hit(juego.mesaJugador, contenedorJugador);
@@ -187,9 +190,9 @@ function doubleDown() {
     return;
 }
 
-function mostrarCartas(mesa, contenedor) {
+function mostrarCartas(mesa, contenedor, ocultarSegunda) {
     contenedor.innerHTML = '';
-
+/* 
     mesa.forEach((carta, index) => {
         const divCarta = document.createElement('div');
 
@@ -200,25 +203,46 @@ function mostrarCartas(mesa, contenedor) {
 
         divCarta.dataset.index = index;
         contenedor.appendChild(divCarta);
+    }); */
+
+
+     contenedor.innerHTML = '';
+
+    mesa.forEach((carta, index) => {
+        const divCarta = document.createElement('div');
+        divCarta.classList.add('carta');
+
+        if (ocultarSegunda && index === 1) {
+            divCarta.classList.add('reverso');
+        } else {
+            if (carta.palo === '♥️' || carta.palo === '♦️') {
+                divCarta.classList.add("roja");
+            }
+            renderizarCarta(divCarta, carta);
+        }
+
+        contenedor.appendChild(divCarta);
     });
+
+
 }
 
-    const MAPA_CARTAS = {
-        1: "A",
-        11: "J",
-        12: "Q",
-        13: "K"
-    };
+const MAPA_CARTAS = {
+    1: "A",
+    11: "J",
+    12: "Q",
+    13: "K"
+};
 
-    function renderizarCarta(divCarta, carta) {
-        const valor = MAPA_CARTAS[carta.valor] ?? carta.valor;
+function renderizarCarta(divCarta, carta) {
+    const valor = MAPA_CARTAS[carta.valor] ?? carta.valor;
 
-        divCarta.innerHTML = `
+    divCarta.innerHTML = `
             <div class="valor arriba">${valor}</div>
             <div class="palo">${carta.palo}</div>
             <div class="valor abajo">${valor}</div>
         `;
-    }
+}
 
 const contenedorCrupier = document.getElementById('container-crupier');
 const contenedorJugador = document.getElementById('container-jugador');
@@ -314,16 +338,6 @@ btnDeal.addEventListener('click', () => {
 function deal() {
     if (juego.apuesta > 0) {
 
-        juego.fichasJugador -= juego.apuesta;
-        saldoJugador.textContent = juego.fichasJugador;
-
-        juego.apuestaAnterior = juego.apuesta;
-        actualizarEstado("Turno del jugador");
-
-        hit(juego.mesaJugador, contenedorJugador);
-        hit(juego.mesaJugador, contenedorJugador);
-        
-        hit(juego.mesaCrupier,contenedorCrupier);
 
         btnDeal.disabled = true;
         btnHit.disabled = false;
@@ -333,32 +347,41 @@ function deal() {
         btnBajarApuesta.disabled = true;
         btnSubirApuesta.disabled = true;
 
-        mostrarCartas(juego.mesaJugador, contenedorJugador);
-        mostrarCartas(juego.mesaCrupier,contenedorCrupier);
+        juego.fichasJugador -= juego.apuesta;
+        saldoJugador.textContent = juego.fichasJugador;
 
-        juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
+        juego.apuestaAnterior = juego.apuesta;
+
+        actualizarEstado("Turno del jugador");
+        hit(juego.mesaJugador, contenedorJugador);
+        hit(juego.mesaJugador, contenedorJugador);
+        mostrarCartas(juego.mesaJugador, contenedorJugador, false);
         juego.puntajeJugador = calcularMano(juego.mesaJugador);
-
         feedbackPuntajeJugador.textContent = juego.puntajeJugador;
-        feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
-        
-        if(juego.puntajeJugador === "BLACKJACK") stand();
+    
 
+        hit(juego.mesaCrupier, contenedorCrupier);
+        juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
+        // calculamos el puntaje para la primera carta antes de agarrar la segunda
+        hit(juego.mesaCrupier, contenedorCrupier);
+        mostrarCartas(juego.mesaCrupier, contenedorCrupier, true);
+        feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
+
+        if (juego.puntajeJugador === "BLACKJACK") stand();
 
     } else {
         alert("Haz una apuesta primero");
     }
 }
 
-
     btnDouble.addEventListener('click', () => {
         doubleDown();
 
     });
 
-function actualizarEstado(nuevoEstado) {
-    estadoPartida.textContent = nuevoEstado;
-}
+    function actualizarEstado(nuevoEstado) {
+        estadoPartida.textContent = nuevoEstado;
+    }
 
 
 function calcularMano(mesa) {
@@ -424,20 +447,20 @@ const estadoPartida = document.getElementById('estado-partida');
 
 const btnModalReintentar = document.querySelector('.joker-btn');
 
-  btnModalReintentar.addEventListener('click', () => {
+btnModalReintentar.addEventListener('click', () => {
     btnModalReintentar.classList.add('clicked');
 
     setTimeout(() => {
-      btnModalReintentar.classList.remove('clicked');
-      location.reload();
+        btnModalReintentar.classList.remove('clicked');
+        location.reload();
     }, 600);
-  });
+});
 
 
 
 function resetearJuego() {
 
-    if(juego.fichasJugador === 0) document.getElementById("modal-derrota").classList.remove("hidden");
+    if (juego.fichasJugador === 0) document.getElementById("modal-derrota").classList.remove("hidden");
 
     juego.apuestaAnterior = juego.apuesta;
     juego.apuesta = 0;
@@ -446,8 +469,8 @@ function resetearJuego() {
 
     juego.mesaCrupier.length = 0;
     juego.mesaJugador.length = 0;
-    mostrarCartas(juego.mesaJugador, contenedorJugador);
-    mostrarCartas(juego.mesaCrupier, contenedorCrupier);
+    mostrarCartas(juego.mesaJugador, contenedorJugador ,false);
+    mostrarCartas(juego.mesaCrupier, contenedorCrupier ,false);
 
     estadoPartida.textContent = "Ingrese una apuesta"
     feedbackPuntajeJugador.textContent = "---"
