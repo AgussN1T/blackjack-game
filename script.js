@@ -30,10 +30,12 @@ const juego = {
     apuesta: 0,
     apuestaAnterior: 0,
     puntajeJugador: 0,
-    puntajeCrupier: 0
+    puntajeCrupier: 0,
+    puntuacionPartida: 0,
+    manosGanadas: 0,
+    manosPerdidas: 0,
+    manosEmpatadas: 0
 }
-
-
 
 function hit(mesa, contenedor) {
     if (juego.mazo.length === 0) generarMazo(juego.mazo);
@@ -46,65 +48,65 @@ function hit(mesa, contenedor) {
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function crupier() {
-/* 
-    if (juego.puntajeJugador === "BLACKJACK" && juego.mesaCrupier.length === 2 && juego.puntajeCrupier != "BLACKJACK") return;
-
-    if (juego.puntajeCrupier === "BLACKJACK") return;
-
-    while (juego.puntajeCrupier < 17 && juego.puntajeCrupier != "BUST") {
-        juego.puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
-        mostrarCartas(juego.mesaCrupier, contenedorCrupier);
-        feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
-        await delay(1000);
-    }
-
-    if (juego.puntajeCrupier === "BUST") {
-        return;
-    }
-
-    if (juego.puntajeCrupier > juego.puntajeJugador) {
-        return;
-    }
-    else {
-        while (juego.puntajeCrupier < juego.puntajeJugador && juego.puntajeCrupier != "BUST") {
+    /* 
+        if (juego.puntajeJugador === "BLACKJACK" && juego.mesaCrupier.length === 2 && juego.puntajeCrupier != "BLACKJACK") return;
+    
+        if (juego.puntajeCrupier === "BLACKJACK") return;
+    
+        while (juego.puntajeCrupier < 17 && juego.puntajeCrupier != "BUST") {
             juego.puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
             mostrarCartas(juego.mesaCrupier, contenedorCrupier);
             feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
             await delay(1000);
         }
-    }
- */
+    
+        if (juego.puntajeCrupier === "BUST") {
+            return;
+        }
+    
+        if (juego.puntajeCrupier > juego.puntajeJugador) {
+            return;
+        }
+        else {
+            while (juego.puntajeCrupier < juego.puntajeJugador && juego.puntajeCrupier != "BUST") {
+                juego.puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
+                mostrarCartas(juego.mesaCrupier, contenedorCrupier);
+                feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
+                await delay(1000);
+            }
+        }
+     */
 
-        juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
+    juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
+    mostrarCartas(juego.mesaCrupier, contenedorCrupier, false);
+    feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
+    await delay(1000);
+
+    if (
+        juego.mesaCrupier.length === 2 &&
+        juego.puntajeJugador === "BLACKJACK" &&
+        juego.puntajeCrupier !== "BLACKJACK"
+    ) return;
+
+    if (juego.puntajeCrupier === "BLACKJACK") return;
+
+    const pedirCarta = async () => {
+        juego.puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
         mostrarCartas(juego.mesaCrupier, contenedorCrupier, false);
         feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
         await delay(1000);
+    };
 
-        if (
-            juego.mesaCrupier.length === 2 &&
-            juego.puntajeJugador === "BLACKJACK" &&
-            juego.puntajeCrupier !== "BLACKJACK"
-        ) return;
-    
-        if (juego.puntajeCrupier === "BLACKJACK") return;
-    
-        const pedirCarta = async () => {
-            juego.puntajeCrupier = hit(juego.mesaCrupier, contenedorCrupier);
-            mostrarCartas(juego.mesaCrupier, contenedorCrupier, false);
-            feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
-            await delay(1000);
-        };
-    
-        while (juego.puntajeCrupier < 17 && juego.puntajeCrupier !== "BUST") {
-            await pedirCarta();
-        }
-    
-        if (juego.puntajeCrupier === "BUST" || juego.puntajeCrupier > juego.puntajeJugador) return;
-    
-        while (juego.puntajeCrupier < juego.puntajeJugador && juego.puntajeCrupier !== "BUST") {
-            await pedirCarta();
-        }
-     
+    while (juego.puntajeCrupier < 17 && juego.puntajeCrupier !== "BUST") {
+        await pedirCarta();
+    }
+
+    if (juego.puntajeCrupier === "BUST" || juego.puntajeCrupier > juego.puntajeJugador) return;
+
+    while (juego.puntajeCrupier < juego.puntajeJugador && juego.puntajeCrupier !== "BUST") {
+        await pedirCarta();
+    }
+
     return;
 }
 
@@ -127,17 +129,17 @@ async function stand() {
     }
 
     if (juego.puntajeCrupier === "BUST") {
-        finalizarRonda("El Jugador Gana " + juego.apuesta * 2);
+        finalizarRonda("El Jugador Gana " + juego.apuesta * 2, juego.apuesta * 2);
         return;
     }
 
     if (juego.puntajeJugador === "BLACKJACK" && juego.puntajeCrupier != "BLACKJACK") {
-        finalizarRonda("El Jugador Gana " + juego.apuesta * 2.5);
+        finalizarRonda("El Jugador Gana "+ juego.apuesta * 2.5, juego.apuesta * 2.5);
         return;
     }
 
     if (juego.puntajeJugador > juego.puntajeCrupier) {
-        finalizarRonda("El Jugador Gana ", juego.apuesta * 2);
+        finalizarRonda("El Jugador Gana " + juego.apuesta * 2, juego.apuesta * 2);
         return;
     }
     else {
@@ -147,22 +149,38 @@ async function stand() {
     }
 }
 
-function finalizarRonda(mensaje, pago = 0) {
+function finalizarRonda(mensaje, pago) {
     actualizarEstado(mensaje);
     setTimeout(() => {
-        if (pago > 0) pagar(pago);
+
+        if (pago > 0) {
+            pagar(pago);
+
+            if (pago === juego.apuesta) {
+                juego.manosEmpatadas += 1;
+            }
+            else {
+                juego.manosGanadas += 1;
+                juego.puntuacionJuego += pago;
+            }
+
+        }
+        else {
+            juego.manosPerdidas += 1;
+        }
+
+        
+        puntuacionPartida.textContent = juego.puntuacionJuego;
+        manosGanadas.textContent = juego.manosGanadas;
+        manosPerdidas.textContent = juego.manosPerdidas;
+        manosEmpatadas.textContent = juego.manosEmpatadas;
         resetearJuego();
     }, 4000);
 }
 
-
-
-
-
 function pagar(monto) {
     juego.fichasJugador += monto;
     saldoJugador.textContent = juego.fichasJugador;
-    // console.log(monto);
 }
 
 function doubleDown() {
@@ -192,21 +210,21 @@ function doubleDown() {
 
 function mostrarCartas(mesa, contenedor, ocultarSegunda) {
     contenedor.innerHTML = '';
-/* 
-    mesa.forEach((carta, index) => {
-        const divCarta = document.createElement('div');
+    /* 
+        mesa.forEach((carta, index) => {
+            const divCarta = document.createElement('div');
+    
+            divCarta.classList.add('carta');
+            // divCarta.classList.add('animado');
+            if (carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
+            renderizarCarta(divCarta, carta);
+    
+            divCarta.dataset.index = index;
+            contenedor.appendChild(divCarta);
+        }); */
 
-        divCarta.classList.add('carta');
-        // divCarta.classList.add('animado');
-        if (carta.palo === '♥️' || carta.palo === '♦️') divCarta.classList.add("roja");
-        renderizarCarta(divCarta, carta);
 
-        divCarta.dataset.index = index;
-        contenedor.appendChild(divCarta);
-    }); */
-
-
-     contenedor.innerHTML = '';
+    contenedor.innerHTML = '';
 
     mesa.forEach((carta, index) => {
         const divCarta = document.createElement('div');
@@ -358,7 +376,7 @@ function deal() {
         mostrarCartas(juego.mesaJugador, contenedorJugador, false);
         juego.puntajeJugador = calcularMano(juego.mesaJugador);
         feedbackPuntajeJugador.textContent = juego.puntajeJugador;
-    
+
 
         hit(juego.mesaCrupier, contenedorCrupier);
         juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
@@ -374,14 +392,14 @@ function deal() {
     }
 }
 
-    btnDouble.addEventListener('click', () => {
-        doubleDown();
+btnDouble.addEventListener('click', () => {
+    doubleDown();
 
-    });
+});
 
-    function actualizarEstado(nuevoEstado) {
-        estadoPartida.textContent = nuevoEstado;
-    }
+function actualizarEstado(nuevoEstado) {
+    estadoPartida.textContent = nuevoEstado;
+}
 
 
 function calcularMano(mesa) {
@@ -443,6 +461,13 @@ const feedbackPuntajeJugador = document.getElementById('puntos-jugador');
 const feedbackPuntajeCrupier = document.getElementById('puntos-crupier');
 const estadoPartida = document.getElementById('estado-partida');
 
+
+const puntuacionPartida = document.getElementById('puntuacion');
+const manosGanadas = document.getElementById('manos-ganadas');
+const manosPerdidas = document.getElementById('manos-perdidas');
+const manosEmpatadas = document.getElementById('manos-empatadas');
+
+
 // document.getElementById("modal-derrota").classList.add("hidden");
 
 const btnModalReintentar = document.querySelector('.joker-btn');
@@ -462,17 +487,17 @@ function resetearJuego() {
 
     if (juego.fichasJugador === 0) document.getElementById("modal-derrota").classList.remove("hidden");
 
+    saldoJugador.textContent = juego.fichasJugador;
+    juego.mesaCrupier.length = 0;
+    juego.mesaJugador.length = 0;
     juego.apuestaAnterior = juego.apuesta;
     juego.apuesta = 0;
 
-    saldoJugador.textContent = juego.fichasJugador;
+    mostrarCartas(juego.mesaJugador, contenedorJugador, false);
+    mostrarCartas(juego.mesaCrupier, contenedorCrupier, false);
 
-    juego.mesaCrupier.length = 0;
-    juego.mesaJugador.length = 0;
-    mostrarCartas(juego.mesaJugador, contenedorJugador ,false);
-    mostrarCartas(juego.mesaCrupier, contenedorCrupier ,false);
+    actualizarEstado("Ingrese una apuesta");
 
-    estadoPartida.textContent = "Ingrese una apuesta"
     feedbackPuntajeJugador.textContent = "---"
     feedbackPuntajeCrupier.textContent = "---"
     valorApuesta.textContent = 0;
@@ -492,6 +517,10 @@ function iniciarJuego() {
     juego.apuesta = 0;
     juego.puntuacionJuego = 0;
 
+    puntuacionPartida.textContent = juego.puntuacionJuego;
+    manosGanadas.textContent = juego.manosGanadas;
+    manosPerdidas.textContent = juego.manosPerdidas;
+    manosEmpatadas.textContent = juego.manosEmpatadas;
 
     btnDeal.disabled = true;
     btnHit.disabled = true;
