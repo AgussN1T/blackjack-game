@@ -5,7 +5,7 @@ function generarMazo(mazo) {
     let valores = config.valores;
     let palos = config.palos;
 
-    for (let k = 0; k < config.mazos; k++) {
+    for (let k = 0; k < config.cantMazos; k++) {
         for (let i = 0; i < valores.length; i++) {
             for (let j = 0; j < palos.length; j++) {
                 cartasTotales.push({ valor: valores[i], palo: palos[j] });
@@ -17,9 +17,7 @@ function generarMazo(mazo) {
         const index = Math.floor(Math.random() * cartasTotales.length);
         mazo.push(cartasTotales.splice(index, 1)[0]);
     }
-
 }
-
 
 const juego = {
     mazo: [],
