@@ -46,6 +46,8 @@ function hit(mesa, contenedor) {
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));
 
 async function crupier() {
+
+    actualizarEstado("Turno del Crupier")
     /* 
         if (juego.puntajeJugador === "BLACKJACK" && juego.mesaCrupier.length === 2 && juego.puntajeCrupier != "BLACKJACK") return;
     
@@ -368,7 +370,7 @@ function deal() {
 
         juego.apuestaAnterior = juego.apuesta;
 
-        actualizarEstado("Turno del jugador");
+        actualizarEstado("Turno del Jugador");
         hit(juego.mesaJugador, contenedorJugador);
         hit(juego.mesaJugador, contenedorJugador);
         mostrarCartas(juego.mesaJugador, contenedorJugador, false);
@@ -377,11 +379,13 @@ function deal() {
 
 
         hit(juego.mesaCrupier, contenedorCrupier);
-        juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
+        // juego.puntajeCrupier = calcularMano(juego.mesaCrupier);
         // calculamos el puntaje para la primera carta antes de agarrar la segunda
         hit(juego.mesaCrupier, contenedorCrupier);
         mostrarCartas(juego.mesaCrupier, contenedorCrupier, true);
-        feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
+
+        // feedbackPuntajeCrupier.textContent = juego.puntajeCrupier;
+        feedbackPuntajeCrupier.textContent = "???"
 
         if (juego.puntajeJugador === "BLACKJACK") stand();
 
